@@ -112,8 +112,7 @@
                     </button>
                 </div>
                 <div class="modal-body table-responsive">
-                    <form method="POST" action="{{ route('breeds.update', $breed->id) }}">
-                        @csrf <!-- Add this line to include the CSRF token -->
+                    <form method="POST" action="{{ isset($breed) ? route('breeds.update', $breed->id) : '#' }}">                        @csrf <!-- Add this line to include the CSRF token -->
                         @method('PUT')
                         <div class="form-floating mb-3">
                             <input type="text" class="form-control" id="editName" name="name" required>

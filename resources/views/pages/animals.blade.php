@@ -193,7 +193,7 @@
                     </button>
                 </div>
                 <div class="modal-body table-responsive">
-                    <form method="POST" action="{{ route('animal.update', $animal->id) }}" enctype="multipart/form-data">
+                    <form method="POST" action="{{ isset($animal) ? route('animal.update', $animal->id) : '#' }}" enctype="multipart/form-data">
                         @csrf <!-- Add this line to include the CSRF token -->
                         @method('PUT')
                         <!-- Image input -->
