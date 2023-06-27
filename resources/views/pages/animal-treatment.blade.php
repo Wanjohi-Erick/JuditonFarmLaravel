@@ -111,65 +111,58 @@
                     <form method="POST" action="{{ route('saveAnimalTreatment') }}" enctype="multipart/form-data">
                         @csrf <!-- Add this line to include the CSRF token -->
 
-                        <!-- Image input -->
-                        <div class="mb-3">
-                            <label for="img" class="form-label">Image</label>
-                            <input type="file" class="form-control-file" id="img" name="img" required>
-                        </div>
 
-                        <!-- Tag input -->
-                        <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="tag" name="tag" required>
-                            <label for="tag">Tag</label>
-                        </div>
 
-                        <!-- Date Acquired input -->
-                        <div class="form-floating mb-3">
-                            <input type="date" class="form-control" id="date_acquired" name="date_acquired" required>
-                            <label for="date_acquired">Date Acquired</label>
-                        </div>
 
                         <div class="form-floating mb-3">
-                            <select class="form-select" name="category" id="category" required>
-                                <option value="">Select Category</option>
+                            <select class="form-select" name="Type" id="Type" required>
+                                <option value="">Select Type</option>
                                 <!-- Add options dynamically based on your breeds data -->
 
                             </select>
-                            <label for="category">Category</label>
+                            <label for="Type">Type</label>
                         </div>
 
-                        <!-- Breed input -->
+                        <!-- product  input -->
                         <div class="form-floating mb-3">
-                            <select class="form-select" name="breed" id="breed" required>
-                                <option value="">Select Breed</option>
+                            <select class="form-select" name="Product" id=Product" required>
+                                <option value="">Select Product</option>
                                 <!-- Add options dynamically based on your breeds data -->
 
                             </select>
-                            <label for="breed">Breed</label>
+                            <label for="product">Product</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <select class="form-select" name="Application method" id=Application method" required>
+                                <option value="">Select Application method</option>
+                                <!-- Add options dynamically based on your breeds data -->
+
+                            </select>
+                            <label for="product">Application method</label>
                         </div>
 
-                        <!-- Weight input -->
                         <div class="form-floating mb-3">
-                            <input type="number" step="0.01" class="form-control" id="weight" name="weight" required>
-                            <label for="weight">Weight</label>
+                            <input type="text" class="form-control" id="technician" name="technician" required>
+                            <label for="tag">Technician</label>
                         </div>
+                        <div class="form-floating mb-3">
+                            <input type="date" class="form-control" id="treatment_date" name="treatement_date" required>
+                            <label for="date_acquired">Treatement date</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="body parts" name="technician" required>
+                            <label for="tag">Technician</label>
+                        </div>
+
+
 
                         <!-- Date Last Weighed input -->
                         <div class="form-floating mb-3">
-                            <input type="date" class="form-control" id="date_last_weighed" name="date_last_weighed"
+                            <input type="date" class="form-control" id="booster_date" name="booster_date"
                                    required>
-                            <label for="date_last_weighed">Date Last Weighed</label>
+                            <label for="booster_date">Booster date</label>
                         </div>
 
-                        <!-- Gender input -->
-                        <div class="form-floating mb-3">
-                            <select class="form-select" id="gender" name="gender" required>
-                                <option value="">Select Gender</option>
-                                <option value="Male">Male</option>
-                                <option value="Female">Female</option>
-                            </select>
-                            <label for="gender">Gender</label>
-                        </div>
 
                         <!-- Description input -->
                         <div class="form-floating mb-3">
