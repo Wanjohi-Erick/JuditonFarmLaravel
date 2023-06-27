@@ -88,7 +88,7 @@
                         <div class="form-floating mb-3">
                             <select name="animal" id="animal" class="form-select">
                                 @foreach ($animals as $animal)
-                                    <option value="{{$animal->id}}"> {{$animal->animal}}</option>
+                                    <option value="{{$animal->id}}"> {{$animal->tag}}</option>
                                 @endforeach
                             </select>
                             <label for="animal">Animal</label>

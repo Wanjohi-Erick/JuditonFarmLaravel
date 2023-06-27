@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\AllAnimals;
 use App\Models\AnimalTreatment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+
 
 class AnimalTreatmentController extends Controller
 {
@@ -59,8 +61,8 @@ class AnimalTreatmentController extends Controller
             } else {
                 return redirect()->route('animals')->with('fail', 'Failed to record treatment.');
             }
-        } catch (\Exception $e) {
-            Log::error('Error recording treatment: ' . $e->getMessage());
+        } catch (\Exception $e)
+        {  Log::error('Error recording treatment: ' . $e->getMessage());
             return redirect()->route('animalTreatment')->with('fail', 'An error occurred while recording treatment.');
         }
     }
