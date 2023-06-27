@@ -57,9 +57,9 @@ class AnimalTreatmentController extends Controller
 
             // Save the animal data
             if ($animalTreatment->save()) {
-                return redirect()->route('animals')->with('success', 'Treatment recorded successfully.');
+                return redirect()->route('animalTreatment')->with('success', 'Treatment recorded successfully.');
             } else {
-                return redirect()->route('animals')->with('fail', 'Failed to record treatment.');
+                return redirect()->route('animalTreatment')->with('fail', 'Failed to record treatment.');
             }
         } catch (\Exception $e)
         {  Log::error('Error recording treatment: ' . $e->getMessage());
