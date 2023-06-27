@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AllAnimals;
 use App\Models\AnimalTreatment;
 use Illuminate\Http\Request;
 
@@ -15,7 +16,8 @@ class AnimalTreatmentController extends Controller
     public function index()
     {
         $animalTreatments = $this->getAllAnimalTreatments();
-        return view('pages.animal-treatment', compact('animalTreatments'));
+        $animals = AllAnimals::all();
+        return view('pages.animal-treatment', compact('animalTreatments', 'animals'));
     }
 
     public function save(Request $request)
