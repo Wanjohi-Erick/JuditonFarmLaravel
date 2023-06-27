@@ -102,7 +102,7 @@
         <div class="modal-dialog modal-dialog-centered modal-medium" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title font-weight-normal" id="settingsModalLabel">Add Animal</h5>
+                    <h5 class="modal-title font-weight-normal" id="settingsModalLabel">Add Treatment</h5>
                     <button aria-label="Close" class="btn-close text-dark" data-bs-dismiss="modal" type="button">
                         <span aria-hidden="true">×</span>
                     </button>
