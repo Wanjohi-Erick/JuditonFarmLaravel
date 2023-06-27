@@ -111,57 +111,88 @@
                     <form method="POST" action="{{ route('saveAnimalTreatment') }}" enctype="multipart/form-data">
                         @csrf <!-- Add this line to include the CSRF token -->
 
-
-
+                        <div class="form-floating mb-3">
+                            <select name="animal" id="animal" class="form-select">
+                                @foreach ($animals as $animal)
+                                    <option value="{{$animal->id}}"> {{$animal->animal}}</option>
+                                @endforeach
+                            </select>
+                            <label for="animal">Animal</label>
+                        </div>
 
                         <div class="form-floating mb-3">
-                            <select class="form-select" name="Type" id="Type" required>
-                                <option value="">Select Type</option>
-                                <!-- Add options dynamically based on your breeds data -->
-
+                            <select class="form-select" id="type" name="type" required>
+                                <option value="">Select type</option>
+                                <option value="Freshian">Freshian </option>
+                                <option value="Hereford">Hereford</option>
                             </select>
-                            <label for="Type">Type</label>
+                            <label for="type">type</label>
                         </div>
+
+
 
                         <!-- product  input -->
                         <div class="form-floating mb-3">
-                            <select class="form-select" name="Product" id=Product" required>
-                                <option value="">Select Product</option>
-                                <!-- Add options dynamically based on your breeds data -->
+                            <select class="form-select" name="product" id=product" required>
+                                <option value="">Select product</option>
+                                <option value="Milk">Milk </option>
+                                <option value="Cheese">Cheese</option>
+                            </select>
+                            <label for="product">product</label>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <select class="form-select" name="application_method" id=application_method" required>
+                                <option value="">Select application_method</option>
+                            <option value="Drug">Drug </option>
+                            <option value="Injection">Injection</option>
 
                             </select>
-                            <label for="product">Product</label>
+                            <label for="application_method">Application method</label>
                         </div>
                         <div class="form-floating mb-3">
-                            <select class="form-select" name="Application method" id=Application method" required>
-                                <option value="">Select Application method</option>
-                                <!-- Add options dynamically based on your breeds data -->
-
-                            </select>
-                            <label for="product">Application method</label>
+                            <input type="numeric" class="form-control" id="days_until_withdrawal" name="days_until_withdrawal" required>
+                            <label for="withdrawal_days">Withrawal days</label>
                         </div>
+
 
                         <div class="form-floating mb-3">
                             <input type="text" class="form-control" id="technician" name="technician" required>
-                            <label for="tag">Technician</label>
+                            <label for="technician">Technician</label>
                         </div>
                         <div class="form-floating mb-3">
-                            <input type="date" class="form-control" id="treatment_date" name="treatement_date" required>
-                            <label for="date_acquired">Treatement date</label>
+                            <input type="number" class="form-control" id="dosage" name="dosage" required>
+
+                            <label for="dosage">Dosage</label>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <input type="date" class="form-control" id="treatment_date" name="treatment_date" required>
+                            <label for="treatment_date">Treatment date</label>
                         </div>
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="body parts" name="technician" required>
-                            <label for="tag">Technician</label>
+                            <select class="form-select" name="body_part" id=body_part" required>
+                            <option value="">Select body_part</option>
+                            <option value="Hands">Hands </option>
+                            <option value="Legs">Legs</option>
+
+                            </select>
+                            <label for="body_part"Body part </label>
                         </div>
 
 
 
-                        <!-- Date Last Weighed input -->
+
                         <div class="form-floating mb-3">
                             <input type="date" class="form-control" id="booster_date" name="booster_date"
                                    required>
                             <label for="booster_date">Booster date</label>
                         </div>
+                        <div class="form-floating mb-3">
+                            <input type="number" class="form-control" id="total_cost" name="total_cost" required>
+                            <label for="total_cost">Total cost</label>
+                        </div>
+
 
 
                         <!-- Description input -->
@@ -169,6 +200,7 @@
                             <textarea class="form-control" id="description" name="description"></textarea>
                             <label for="description">Description</label>
                         </div>
+
 
                         <!-- Submit button -->
                         <input type="submit" class="btn btn-primary" value="Submit">
