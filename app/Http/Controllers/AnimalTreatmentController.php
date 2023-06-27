@@ -24,6 +24,7 @@ class AnimalTreatmentController extends Controller
     {
         try {
             $validatedData = $request->validate([
+                'animal' => 'required',
                 'type' => 'required',
                 'product' => 'required',
                 'application_method' => 'required',
@@ -39,6 +40,7 @@ class AnimalTreatmentController extends Controller
 
             // Create a new AnimalTreatment instance
             $animalTreatment = new AnimalTreatment();
+            $animalTreatment->animal_id = $validatedData['animal'];
             $animalTreatment->type = $validatedData['type'];
             $animalTreatment->product = $validatedData['product'];
             $animalTreatment->application_method = $validatedData['application_method'];
