@@ -100,7 +100,7 @@
         <div class="modal-dialog modal-dialog-centered modal-medium" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title font-weight-normal" id="settingsModalLabel">Add Treatment</h5>
+                    <h5 class="modal-title font-weight-normal" id="settingsModalLabel">Edit Treatment</h5>
                     <button aria-label="Close" class="btn-close text-dark" data-bs-dismiss="modal" type="button">
                         <span aria-hidden="true">×</span>
                     </button>
@@ -109,7 +109,7 @@
                     <form method="POST" action="{{ isset($animal) ? route('animal.update', $animal->id) : '#' }}" enctype="multipart/form-data">
                     <form method="POST" action="{{ route('saveAnimalTreatment') }}" enctype="multipart/form-data">
                         @csrf <!-- Add this line to include the CSRF token -->
-
+                        @method('PUT')
                         <div class="form-floating mb-3">
                             <select name="animal" id="animal" class="form-select">
                                 @foreach ($animals as $animal)
