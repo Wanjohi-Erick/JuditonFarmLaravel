@@ -36,6 +36,20 @@ function openEditModal(url) {
                 $('#edit_gender').val(response.gender);
                 $('#edit_description').val(response.description);
             }
+            else if (url.indexOf('animal-treatment') !== -1) {
+                $('#editTag').val(response.tag);
+                $('#edit_type').val(response.type);
+                $('#edit_product').val(response.product);
+                $('#edit_application_method').val(response.application_method);
+                $('#edit_days_until_withdrawal').val(response.days_until_withdarawal);
+                $('#edit_technician').val(response.date_last_weighed);
+                $('#edit_dosage').val(response.dosage);
+                $('#edit_treatment_date').val(response.treatment_date);
+                $('#edit_body_part').val(response.body_part);
+                $('#edit_booster_date').val(response.booster_date);
+                $('#edit_total_cost').val(response.total_cost);
+                $('#edit_description').val(response.description);
+            }
 
 
             // Show the modal
