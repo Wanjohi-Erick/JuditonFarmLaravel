@@ -66,11 +66,9 @@
                                     <tbody>
                                     @foreach ($animalTreatments as $animalTreatment)
                                         <tr>
-                                            <td class="text-center"><img width="50" height="50"
-                                                                         src="{{ asset('storage/'.$animalTreatment->img) }}">
-                                            </td>
+
                                             <td class="text-center">{{ $animalTreatment->treatment_date }}</td>
-                                            <td class="text-center">{{ $animalTreatment->farmAnimal->animal }}</td>
+                                            <td class="text-center">{{ $animalTreatment->farmAnimal->tag}}</td>
                                             <td class="text-center">{{ $animalTreatment->type }}</td>
                                             <td class="text-center">{{ $animalTreatment->product }}</td>
                                             <td class="text-center">{{ $animalTreatment->days_until_withdrawal }}</td>
@@ -108,6 +106,7 @@
                     </button>
                 </div>
                 <div class="modal-body table-responsive">
+                    <form method="POST" action="{{ isset($animal) ? route('animal.update', $animal->id) : '#' }}" enctype="multipart/form-data">
                     <form method="POST" action="{{ route('saveAnimalTreatment') }}" enctype="multipart/form-data">
                         @csrf <!-- Add this line to include the CSRF token -->
 
@@ -151,8 +150,8 @@
                             <label for="application_method">Application method</label>
                         </div>
                         <div class="form-floating mb-3">
-                            <input type="numeric" class="form-control" id="days_until_withdrawal" name="days_until_withdrawal" required>
-                            <label for="withdrawal_days">Withrawal days</label>
+                            <input type="number" class="form-control" id="days_until_withdrawal" name="days_until_withdrawal" required>
+                            <label for="withdrawal_days">Withdrawal days</label>
                         </div>
 
 
@@ -211,97 +210,6 @@
         </div>
     </div>
 
-    {{--<div aria-hidden="true" aria-labelledby="editPigModal" class="modal fade" id="editPigModal" role="dialog">
-        <div class="modal-dialog modal-dialog-centered modal-medium" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title font-weight-normal" id="settingsModalLabel">Edit Animal</h5>
-                    <button aria-label="Close" class="btn-close text-dark" data-bs-dismiss="modal" type="button">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body table-responsive">
-                    <form method="POST" action="{{ route('animalTreatment.update', $animalTreatment->id) }}"
-                          enctype="multipart/form-data">
-                        @csrf <!-- Add this line to include the CSRF token -->
-                        @method('PUT')
-                        <!-- Image input -->
-                        <div class="mb-3">
-                            <label for="img" class="form-label">Image</label>
-                            <input type="file" class="form-control-file" id="edit_img" name="img">
-                        </div>
-
-                        <!-- Tag input -->
-                        <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="editTag" name="tag" required>
-                            <label for="tag">Tag</label>
-                        </div>
-
-                        <!-- Date Acquired input -->
-                        <div class="form-floating mb-3">
-                            <input type="date" class="form-control" id="edit_date_acquired" name="date_acquired"
-                                   required>
-                            <label for="date_acquired">Date Acquired</label>
-                        </div>
-
-                        <!-- Breed input -->
-                        <div class="form-floating mb-3">
-                            <select class="form-select" name="category" id="edit_category" required>
-                                <option value="">Select Category</option>
-                                <!-- Add options dynamically based on your breeds data -->
-
-                            </select>
-                            <label for="category">Category</label>
-                        </div>
-
-                        <div class="form-floating mb-3">
-                            <select class="form-select" name="breed" id="edit_breed" required>
-                                <option value="">Select Breed</option>
-                                <!-- Add options dynamically based on your breeds data -->
-
-                            </select>
-                            <label for="breed">Breed</label>
-                        </div>
-
-                        <!-- Weight input -->
-                        <div class="form-floating mb-3">
-                            <input type="number" step="0.01" class="form-control" id="edit_weight" name="weight"
-                                   required>
-                            <label for="weight">Weight</label>
-                        </div>
-
-                        <!-- Date Last Weighed input -->
-                        <div class="form-floating mb-3">
-                            <input type="date" class="form-control" id="edit_date_last_weighed" name="date_last_weighed"
-                                   required>
-                            <label for="date_last_weighed">Date Last Weighed</label>
-                        </div>
-
-                        <!-- Gender input -->
-                        <div class="form-floating mb-3">
-                            <select class="form-select" id="edit_gender" name="gender" required>
-                                <option value="">Select Gender</option>
-                                <option value="Male">Male</option>
-                                <option value="Female">Female</option>
-                            </select>
-                            <label for="gender">Gender</label>
-                        </div>
-
-                        <!-- Description input -->
-                        <div class="form-floating mb-3">
-                            <textarea class="form-control" id="edit_description" name="description"></textarea>
-                            <label for="description">Description</label>
-                        </div>
-
-                        <!-- Submit button -->
-                        <input type="submit" class="btn btn-primary" value="Submit">
-                    </form>
-
-                </div>
-            </div>
-        </div>
-    </div>
---}}
     <div class="modal fade" id="modal-delete" tabindex="-1" role="dialog" aria-labelledby="modal-delete"
          aria-hidden="true">
         <div class="modal-dialog modal-danger modal-dialog-centered modal-" role="document">
