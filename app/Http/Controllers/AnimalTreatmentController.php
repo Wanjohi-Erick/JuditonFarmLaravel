@@ -76,7 +76,8 @@ class AnimalTreatmentController extends Controller
 
     public function update(Request $request, $id)
     {
-        $animalTreatment = $this->find($id);$animal->animal_id = $request->input('tag');
+        $animalTreatment = $this->find($id);
+        $animalTreatment->animal_id = $request->input('animal');
         $animalTreatment->type = $request->input('type');
         $animalTreatment->product = $request->input('product');
         $animalTreatment->application_method = $request->input('application_method');
@@ -105,7 +106,7 @@ class AnimalTreatmentController extends Controller
     public function view($id) {
 
         $animalsTreatment = $this->find($id);
-        return view('pages.animal-treatment', compact('animalsTreatment',));
+        return view('pages.view-animal-treatment', compact('animalsTreatment'));
     }
 
 }
