@@ -38,6 +38,7 @@
                                 </button>
                             </div>
                         </div>
+
                         @endif
                         @if (Session::has('demo'))
                                 <div class="row">

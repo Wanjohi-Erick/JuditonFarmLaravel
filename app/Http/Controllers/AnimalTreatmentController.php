@@ -76,7 +76,18 @@ class AnimalTreatmentController extends Controller
 
     public function update(Request $request, $id)
     {
-        $animalTreatment = $this->find($id);
+        $animalTreatment = $this->find($id);$animal->animal_id = $request->input('tag');
+        $animalTreatment->type = $request->input('type');
+        $animalTreatment->product = $request->input('product');
+        $animalTreatment->application_method = $request->input('application_method');
+        $animalTreatment->days_until_withdrawal = $request->input('days_until_withdrawal');
+        $animalTreatment->technician = $request->input('technician');
+        $animalTreatment->dosage = $request->input('dosage');
+        $animalTreatment->treatment_date = $request->input('treatment_date');
+        $animalTreatment->body_part = $request->input('body_part');
+        $animalTreatment->booster_date = $request->input('booster_date');
+        $animalTreatment->total_cost = $request->input('total_cost');
+        $animalTreatment->description = $request->input('description');
 
 
         $animalTreatment->save();
@@ -91,11 +102,10 @@ class AnimalTreatmentController extends Controller
 
         return redirect() -> back() ->with('success', 'Treatment deleted successfully');
     }
+    public function view($id) {
 
-    /*public function view($id) {
+        $animalsTreatment = $this->find($id);
+        return view('pages.animal-treatment', compact('animalsTreatment',));
+    }
 
-        $animalTreatments = $this->find($id);
-        $weights = AnimalWeight::where('animal_id', $id)->get();
-        return view('pages.view-animal', compact('animals', 'weights'));
-    }*/
 }
