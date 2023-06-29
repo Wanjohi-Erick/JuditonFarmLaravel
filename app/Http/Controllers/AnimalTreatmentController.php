@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\AllAnimals;
 use App\Models\AnimalTreatment;
-use App\Models\AnimalWeight;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -77,19 +76,18 @@ class AnimalTreatmentController extends Controller
 
     public function update(Request $request, $id)
     {
-        $animalTreatment = $this->find($id);
-        $animal->animal_id = $request->input('tag');
-        $animal->type = $request->input('type');
-        $animal->product = $request->input('product');
-        $animal->application_method = $request->input('application_method');
-        $animal->days_until_withdrawal = $request->input('days_until_withdrawal');
-        $animal->technician = $request->input('technician');
-        $animal->dosage = $request->input('dosage');
-        $animal->treatment_date = $request->input('treatment_date');
-        $animal->body_part = $request->input('body_part');
-        $animal->booster_date = $request->input('booster_date');
-        $animal->total_cost = $request->input('total_cost');
-        $animal->description = $request->input('description');
+        $animalTreatment = $this->find($id);$animal->animal_id = $request->input('tag');
+        $animalTreatment->type = $request->input('type');
+        $animalTreatment->product = $request->input('product');
+        $animalTreatment->application_method = $request->input('application_method');
+        $animalTreatment->days_until_withdrawal = $request->input('days_until_withdrawal');
+        $animalTreatment->technician = $request->input('technician');
+        $animalTreatment->dosage = $request->input('dosage');
+        $animalTreatment->treatment_date = $request->input('treatment_date');
+        $animalTreatment->body_part = $request->input('body_part');
+        $animalTreatment->booster_date = $request->input('booster_date');
+        $animalTreatment->total_cost = $request->input('total_cost');
+        $animalTreatment->description = $request->input('description');
 
 
         $animalTreatment->save();
