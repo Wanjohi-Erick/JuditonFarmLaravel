@@ -66,11 +66,8 @@
                                     <tbody>
                                     @foreach ($animalTreatments as $animalTreatment)
                                         <tr>
-                                            <td class="text-center"><img width="50" height="50"
-                                                                         src="{{ asset('storage/'.$animalTreatment->img) }}">
-                                            </td>
                                             <td class="text-center">{{ $animalTreatment->treatment_date }}</td>
-                                            <td class="text-center">{{ $animalTreatment->farmAnimal->animal }}</td>
+                                            <td class="text-center">{{ $animalTreatment->farmAnimal->tag }}</td>
                                             <td class="text-center">{{ $animalTreatment->type }}</td>
                                             <td class="text-center">{{ $animalTreatment->product }}</td>
                                             <td class="text-center">{{ $animalTreatment->days_until_withdrawal }}</td>
@@ -177,7 +174,7 @@
                             <option value="Legs">Legs</option>
 
                             </select>
-                            <label for="body_part"Body part </label>
+                            <label for="body_part">Body part </label>
                         </div>
 
 
