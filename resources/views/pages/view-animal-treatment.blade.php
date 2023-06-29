@@ -11,19 +11,11 @@
                 <span class="mask  bg-gradient-primary  opacity-6"></span>
             </div>
             <div class="card card-body mx-3 mx-md-4 mt-n6">
-                <div class="row gx-4 mb-2">
-                    <div class="col-auto">
-                        <div class="avatar avatar-xl position-relative align-self-center">
-                            <img src="{{ asset('storage/'.$animals->img) }}" alt="profile_image"
-                                 class="w-100 border-radius-lg shadow-sm">
-                        </div>
-                    </div>
-                </div>
                 <div class="card card-plain h-100">
                     <div class="card-header pb-0 p-3">
                         <div class="row">
                             <div class="col-md-8 d-flex align-items-center">
-                                <h6 class="mb-3">Animal Information</h6>
+                                <h6 class="mb-3">Treatment Information</h6>
                             </div>
                         </div>
                     </div>
@@ -46,80 +38,90 @@
 
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label">Tag</label>
-                                    <input type="email" name="email" class="form-control border border-2 p-2" value='{{ $animals->tag }}' disabled>
+                                    <input type="text" name="tag" class="form-control border border-2 p-2"
+                                           value='{{ $animalsTreatment->farmAnimal->tag }}' disabled>
                                     @error('email')
                                     <p class='text-danger inputerror'>{{ $message }} </p>
                                     @enderror
                                 </div>
                                 <div class="mb-3 col-md-6">
-                                    <label class="form-label">type/label>
-                                        <input type="text" name="name" class="form-control border border-2 p-2" value='{{ $animals->date_acquired }}' disabled>
+                                <label class="form-label">type</label>
+                                        <input type="text" name="name" class="form-control border border-2 p-2"
+                                               value='{{ $animalsTreatment->type }}' disabled>
                                         @error('name')
                                         <p class='text-danger inputerror'>{{ $message }} </p>
                                     @enderror
                                 </div>
 
                                 <div class="mb-3 col-md-6">
-                                    <label class="form-label">product/label>
-                                    <input type="text" name="name" class="form-control border border-2 p-2" value='{{ $animals->date_acquired }}' disabled>
-                                    @error('name')
-                                    <p class='text-danger inputerror'>{{ $message }} </p>
+                                <label class="form-label">product</label>
+                                        <input type="text" name="name" class="form-control border border-2 p-2"
+                                               value='{{ $animalsTreatment->product }}' disabled>
+                                        @error('name')
+                                        <p class='text-danger inputerror'>{{ $message }} </p>
                                     @enderror
                                 </div>
 
 
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label">application_method</label>
-                                    <input type="text" name="name" class="form-control border border-2 p-2" value='{{ $animals->animalBreed->name }}' disabled>
+                                    <input type="text" name="name" class="form-control border border-2 p-2"
+                                           value='{{ $animalsTreatment->application_method }}' disabled>
                                     @error('location')
                                     <p class='text-danger inputerror'>{{ $message }} </p>
                                     @enderror
                                 </div>
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label">Withrawal days</label>
-                                    <input type="text" name="name" class="form-control border border-2 p-2" value='{{ $animals->animalBreed->name }}' disabled>
+                                    <input type="text" name="name" class="form-control border border-2 p-2"
+                                           value='{{ $animalsTreatment->type }}' disabled>
                                     @error('location')
                                     <p class='text-danger inputerror'>{{ $message }} </p>
                                     @enderror
                                 </div>
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label">technician</label>
-                                    <input type="text" name="name" class="form-control border border-2 p-2" value='{{ $animals->animalBreed->name }}' disabled>
+                                    <input type="text" name="name" class="form-control border border-2 p-2"
+                                           value='{{ $animalsTreatment->technician }}' disabled>
                                     @error('location')
                                     <p class='text-danger inputerror'>{{ $message }} </p>
                                     @enderror
                                 </div>
                                 <div class="mb-3 col-md-6">
-                                    <label class="form-label">dosage</label>
-                                    <input type="text" name="name" class="form-control border border-2 p-2" value='{{ $animals->animalBreed->name }}' disabled>
+                                <input type="text" name="name" class="form-control border border-2 p-2"
+                                           value='{{ $animalsTreatment->dosage }}' disabled>
                                     @error('location')
                                     <p class='text-danger inputerror'>{{ $message }} </p>
                                     @enderror
                                 </div>
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label">treatment_date</label>
-                                    <input type="text" name="name" class="form-control border border-2 p-2" value='{{ $animals->animalBreed->name }}' disabled>
+                                    <input type="text" name="name" class="form-control border border-2 p-2"
+                                           value='{{ $animalsTreatment->treatment_date }}' disabled>
                                     @error('location')
                                     <p class='text-danger inputerror'>{{ $message }} </p>
                                     @enderror
                                 </div>
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label">body_part</label>
-                                    <input type="text" name="name" class="form-control border border-2 p-2" value='{{ $animals->animalBreed->name }}' disabled>
+                                    <input type="text" name="name" class="form-control border border-2 p-2"
+                                           value='{{ $animalsTreatment->body_part }}' disabled>
                                     @error('location')
                                     <p class='text-danger inputerror'>{{ $message }} </p>
                                     @enderror
                                 </div>
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label">booster_date</label>
-                                    <input type="text" name="name" class="form-control border border-2 p-2" value='{{ $animals->animalBreed->name }}' disabled>
+<input type="text" name="name" class="form-control border border-2 p-2"
+                                           value='{{ $animalsTreatment->booster_date }}' disabled>
                                     @error('location')
                                     <p class='text-danger inputerror'>{{ $message }} </p>
                                     @enderror
                                 </div>
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label">total_cost</label>
-                                    <input type="text" name="name" class="form-control border border-2 p-2" value='{{ $animals->animalBreed->name }}' disabled>
+<input type="text" name="name" class="form-control border border-2 p-2"
+                                           value='{{ $animalsTreatment->total_cost }}' disabled>
                                     @error('location')
                                     <p class='text-danger inputerror'>{{ $message }} </p>
                                     @enderror
@@ -128,8 +130,10 @@
                                 <div class="mb-3 col-md-12">
                                     <label for="floatingTextarea2">Description</label>
                                     <textarea class="form-control border border-2 p-2"
-                                              placeholder=" Say something about yourself" id="floatingTextarea2" name="about"
-                                              rows="4" cols="50" disabled>{{ $animals->description }}</textarea>
+placeholder=" Say something about yourself" id="floatingTextarea2"
+                                              name="about"
+                                              rows="4" cols="50"
+                                              disabled>{{ $animalsTreatment->description }}</textarea>
                                     @error('about')
                                     <p class='text-danger inputerror'>{{ $message }} </p>
                                     @enderror

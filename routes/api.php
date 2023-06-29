@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AnimalTreatmentController;
 use App\Http\Controllers\AnimalWeightController;
 use App\Http\Controllers\BreedController;
 use App\Http\Controllers\AnimalCategoryController;
@@ -26,3 +27,4 @@ Route::get('getAllAnimals', [AnimalCategoryController::class, 'getAllAnimals'])-
 Route::get('getAllFarmAnimals', [AllFarmAnimalsController::class, 'getAllAnimals'])->name('allFarmAnimals');
 Route::get('getAllBreeds', [BreedController::class, 'getAllBreeds'])->name('allBreeds');
 Route::get('getAllWeights', [AnimalWeightController::class, 'show'])->name('allWeights');
+Route::get('getAllTreatments', [AnimalTreatmentController::class, 'getAllAnimalTreatments'])->name('allTreatments');

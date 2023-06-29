@@ -57,9 +57,9 @@ class AnimalTreatmentController extends Controller
 
             // Save the animal data
             if ($animalTreatment->save()) {
-                return redirect()->route('animals')->with('success', 'Treatment recorded successfully.');
+                return redirect()->route('animalTreatment')->with('success', 'Treatment recorded successfully.');
             } else {
-                return redirect()->route('animals')->with('fail', 'Failed to record treatment.');
+                return redirect()->route('animalTreatment')->with('fail', 'Failed to record treatment.');
             }
         } catch (\Exception $e)
         {  Log::error('Error recording treatment: ' . $e->getMessage());
@@ -76,7 +76,6 @@ class AnimalTreatmentController extends Controller
 
     public function update(Request $request, $id)
     {
-        $animalTreatment = $this->find($id);$animal->animal_id = $request->input('tag');
         $animalTreatment->type = $request->input('type');
         $animalTreatment->product = $request->input('product');
         $animalTreatment->application_method = $request->input('application_method');
@@ -105,7 +104,7 @@ class AnimalTreatmentController extends Controller
     public function view($id) {
 
         $animalsTreatment = $this->find($id);
-        return view('pages.animal-treatment', compact('animalsTreatment',));
+        return view('pages.view-animal-treatment', compact('animalsTreatment'));
     }
 
 }
