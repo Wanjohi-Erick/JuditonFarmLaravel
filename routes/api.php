@@ -5,6 +5,8 @@ use App\Http\Controllers\AnimalWeightController;
 use App\Http\Controllers\BreedController;
 use App\Http\Controllers\AnimalCategoryController;
 use App\Http\Controllers\AllFarmAnimalsController;
+use App\Http\Controllers\ItemsController;
+use App\Http\Controllers\ItemStockController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -28,3 +30,6 @@ Route::get('getAllFarmAnimals', [AllFarmAnimalsController::class, 'getAllAnimals
 Route::get('getAllBreeds', [BreedController::class, 'getAllBreeds'])->name('allBreeds');
 Route::get('getAllWeights', [AnimalWeightController::class, 'show'])->name('allWeights');
 Route::get('getAllTreatments', [AnimalTreatmentController::class, 'getAllAnimalTreatments'])->name('allTreatments');
+Route::get('getAllItems', [ItemsController::class, 'getAllItems'])->name('allItems');
+Route::get('getItemStock', [ItemStockController::class, 'getAllItems'])->name('stock');
+
