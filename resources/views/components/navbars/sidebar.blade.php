@@ -14,7 +14,7 @@
     <hr class="horizontal light mt-0 mb-2">
     <div class="collapse navbar-collapse  w-auto  max-height-vh-100" id="sidenav-collapse-main">
         <ul class="navbar-nav">
-            <li class="nav-item mt-3">
+            {{--<li class="nav-item mt-3">
                 <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">Laravel examples</h6>
             </li>
             <li class="nav-item">
@@ -64,7 +64,7 @@
                     </div>
                     <span class="nav-link-text ms-1">Billing</span>
                 </a>
-            </li>
+            </li>--}}
             <li class="nav-item">
                 <a class="nav-link text-white {{ $activePage == 'animal-categories' ? ' active bg-gradient-primary' : '' }}  "
                     href="{{ route('animal-categories') }}">
@@ -99,6 +99,15 @@
                         <i class="material-icons opacity-10">format_textdirection_r_to_l</i>
                     </div>
                     <span class="nav-link-text ms-1">Treatment</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white {{ $activePage == 'items' ? ' active bg-gradient-primary' : '' }}  "
+                   href="{{ route('items') }}">
+                    <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="material-icons opacity-10">format_textdirection_r_to_l</i>
+                    </div>
+                    <span class="nav-link-text ms-1">Items</span>
                 </a>
             </li>
             <li class="nav-item">
