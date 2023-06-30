@@ -4,6 +4,7 @@ use App\Http\Controllers\AnimalTreatmentController;
 use App\Http\Controllers\BreedController;
 use App\Http\Controllers\AnimalCategoryController;
 use App\Http\Controllers\AllFarmAnimalsController;
+use App\Http\Controllers\ItemsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -78,6 +79,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/animalTreatment/{id}/view', [AnimalTreatmentController::class, 'view'])->name('animalTreatment.view');
     Route::put('/animalTreatment/{id}/update', [AnimalTreatmentController::class, 'update'])->name('animalTreatment.update');
     Route::get('/animalTreatment/{id}/delete', [AnimalTreatmentController::class, 'delete'])->name('animalTreatment.delete');
+    Route::get('items', [ItemsController::class, 'index'])->name('items');
+    Route::post('/save-item', [ItemsController::class, 'save'])->name('saveItem');
+    Route::get('/item/{id}/find', [ItemsController::class, 'find'])->name('item.find');
+    Route::get('/item/{id}/view', [ItemsController::class, 'view'])->name('item.view');
+    Route::put('/item/{id}/update', [ItemsController::class, 'update'])->name('item.update');
+    Route::get('/item/{id}/delete', [ItemsController::class, 'delete'])->name('item.delete');
 
     Route::get('log-viewer', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index')->name('log-viewer');
 

@@ -1,0 +1,1202 @@
+<div class="content" th:fragment="inventoryAdjustment" id="output">
+    <div class="container-fluid py-4">
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card">
+
+                    <div class="card-header">
+                        <h5 class="mb-0">Inventory Adjustment</h5>
+                        <p class="text-sm mb-0">
+                            Adjust inventory items.
+                        </p>
+                    </div>
+                    <div class=" me-3 my-3 text-end">
+                        <a class="btn bg-gradient-dark mb-0" onclick="addAdjustmentModalLaunch()"><i
+                                class="material-icons text-sm">add</i>&nbsp;&nbsp;New
+                            Adjustment</a>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-flush" id="itemsAdjustmentTable">
+                            <thead class="thead-light">
+                            <tr>
+                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                    Name
+                                </th>
+                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                    Date
+                                </th>
+                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                    Reason
+                                </th>
+                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                    Description
+                                </th>
+                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                    Type
+                                </th>
+                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                    Adjusted By
+                                </th>
+                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                    Action
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="addAdjustmentModal" class="modal modal-xl" style="z-index: 10000;">
+
+        <div class="modal-dialog">
+
+            <form id="addAdjustmentForm">
+                <div class="modal-content">
+
+                    <div class="modal-header bg-gradient-primary" style=";max-height:50px">
+                        <h4 class="modal-title" style="color:white;margin-top:-6px">Add Inventory Adjustment</h4>
+                        <a class="close" data-bs-dismiss="modal">&times;</a>
+                    </div>
+
+                    <div class="modal-body">
+
+                        <div class="content">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-lg-4 d-flex align-items-stretch" id="firstdiv">
+                                        <div class="card w-100" id="left">
+
+                                            <div class="card-body table-responsive">
+                                                <select id="adjustmentType" name="adjustmentType" class="form-select mb-3">
+                                                    <option disabled selected>Adjustment Type</option>
+                                                    <option value="Quantity Adjustment">Quantity Adjustment</option>
+                                                    <option value="Value Adjustment">Value Adjustment</option>
+                                                </select>
+
+                                                <select id="item" name="item" class="form-select mb-3">
+                                                    <option disabled selected>Item</option>
+
+                                                </select>
+                                                <div class="input-group input-group-dynamic mb-3">
+                                                    <label class="form-label">Date</label>
+                                                    <input name="date" class="multisteps-form__input form-control" type="date" />
+                                                </div>
+
+                                                <div class="input-group input-group-dynamic mb-3">
+                                                    <label class="form-label">Account</label>
+                                                    <input name="account" class="multisteps-form__input form-control" type="text" />
+                                                </div>
+
+                                                <select id="reason" name="reason" class="form-select mb-3">
+                                                    <option disabled selected>Reason</option>
+                                                    <option value="Stock on Fire">Stock on Fire</option>
+                                                    <option value="Stolen Goods">Stolen Goods</option>
+                                                    <option value="Stock written off">Stock written off</option>
+                                                    <option value="Damaged Goods">Damaged Goods</option>
+                                                    <option value="Stock taking results">Stock taking results</option>
+                                                    <option value="Inventory Revaluation">Inventory Revaluation</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 d-flex align-items-stretch" id="firstdiv">
+                                        <div class="card w-100" id="left">
+                                            <div class="card-body table-responsive">
+                                                <textarea placeholder="Description" class="form-control" name="description" id="description" cols="30"
+                                                          rows="10"></textarea>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                    <div class="col-lg-4 d-flex align-items-stretch" id="valueOrQuantity">
+                                        <div class="card w-100" id="left">
+                                            <div class="card-body table-responsive">
+                                                <div class="input-group input-group-dynamic mb-3">
+                                                    <label class="form-label">Value</label>
+                                                    <input name="quantity" class="multisteps-form__input form-control" type="number" />
+                                                </div>
+
+                                                <div class="input-group input-group-dynamic mb-3">
+                                                    <label class="form-label">New Value</label>
+                                                    <input name="newQuantity" class="multisteps-form__input form-control" type="number" />
+                                                </div>
+
+                                                <div class="input-group input-group-dynamic mb-3">
+                                                    <label class="form-label">Adjusted</label>
+                                                    <input name="adjusted" class="multisteps-form__input form-control" type="number" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <input type="submit" value="Save" class="btn btn-primary">
+                        <!--
+          <button onclick="addItem()" type="submit" class="btn btn-primary" value="Submit" >Save</button>
+-->
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </form>
+            <script>
+                $(document).ready(function() {
+                    // Bind submit event to the form
+                    $('#addAdjustmentForm').submit(function(event) {
+                        // Prevent the form from submitting normally
+                        event.preventDefault();
+
+                        $('#addAdjustmentModal').modal('hide');
+                        // Get the form data
+                        var formData = $(this).serialize();
+
+                        // Send an AJAX request
+                        $.ajax({
+                            type: 'POST',
+                            url: '/api/inv/addAdjustment',
+                            data: formData,
+                            success: function(response) {
+                                $('#infoModal .modal-body').empty();
+                                $('#infoModal .modal-body').append("<p>"+response+"</p>");
+                                $('#infoModal').modal('show');
+
+                                $('#infoModal #confirmOk').click(function () {
+                                    openAdjustmentFragment();
+                                })
+                            },
+                            error: function(error) {
+                                $('#infoModal .modal-body').empty();
+                                $('#infoModal .modal-body').append("<p>"+error+"</p>");
+                                $('#infoModal').modal('show');
+                            }
+                        });
+                    });
+                });
+            </script>
+        </div>
+    </div>
+</div>
+
+<div class="content" th:fragment="vendors" id="output">
+    <div class="container-fluid py-4">
+        <div class="row">
+            <div class="col-12">
+                <div class="card my-4">
+
+                    <div class="card-header">
+                        <h5 class="mb-0">Vendors</h5>
+                        <p class="text-sm mb-0">
+                            A list of all school vendors.
+                        </p>
+                    </div>
+                    <div class=" me-3 my-3 text-end">
+                        <a class="btn bg-gradient-dark mb-0" onclick="addVendorModalLaunch()"><i
+                                class="material-icons text-sm">add</i>&nbsp;&nbsp;Add New
+                            Vendor</a>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-flush" id="vendorsTable">
+                            <thead class="thead-light">
+                            <tr>
+                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                    Company
+                                </th>
+                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                    Contact Person
+                                </th>
+                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                    Items Group
+                                </th>
+                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                    Phone
+                                </th>
+                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                    Email
+                                </th>
+                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                    Receivables
+                                </th>
+                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                    Payables
+                                </th>
+                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                    Action
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="addVendorModal" class="modal modal-lg" style="z-index: 10000;">
+
+        <div class="modal-dialog">
+
+            <form  id="addVendorForm">
+                <div class="modal-content">
+
+                    <div class="modal-header bg-gradient-primary" style=";max-height:50px">
+                        <h4 class="modal-title" style="color:white;margin-top:-6px">Add Vendor</h4>
+                        <button type="button" class="close" data-bs-dismiss="modal">&times;</button>
+                    </div>
+
+                    <div class="modal-body">
+
+                        <div class="content">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-lg-6 d-flex align-items-stretch" id="firstdiv">
+                                        <div class="card w-100" id="left">
+
+                                            <div class="card-body table-responsive">
+                                                <div class="input-group input-group-dynamic mb-3">
+                                                    <label class="form-label">Contact Person Name</label>
+                                                    <input name="name" class="multisteps-form__input form-control" type="text" />
+                                                </div>
+                                                <div class="input-group input-group-dynamic mb-3">
+                                                    <label class="form-label">Company</label>
+                                                    <input name="company" class="multisteps-form__input form-control" type="text" />
+                                                </div>
+
+                                                <div class="input-group input-group-dynamic mb-3">
+                                                    <label class="form-label">Opening Bal</label>
+                                                    <input name="openingBal" class="multisteps-form__input form-control" type="text" />
+                                                </div>
+
+                                                <div class="input-group input-group-dynamic mb-3">
+                                                    <label class="form-label">KRA Pin</label>
+                                                    <input name="kraPin" class="multisteps-form__input form-control" type="text" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 d-flex align-items-stretch" id="firstdiv">
+                                        <div class="card w-100" id="left">
+                                            <div class="card-body table-responsive">
+                                                <div class="d-flex align-items-center">
+                                                    <select id="itemGroup" name="itemGroup" class="form-select" style="width: 197px;">
+                                                        <option disabled selected>Pick a group</option>
+                                                        <!-- Add your options here -->
+                                                    </select>
+                                                    <button id="newButton" class="btn btn-primary ms-2" onclick="loadNewGroup(event)">New</button>
+                                                </div>
+
+                                                <div class="input-group input-group-dynamic mb-3">
+                                                    <label class="form-label">Phone</label>
+                                                    <input name="phone" class="multisteps-form__input form-control" type="text" />
+                                                </div>
+
+                                                <div class="input-group input-group-dynamic mb-3">
+                                                    <label class="form-label">Email</label>
+                                                    <input name="email" class="multisteps-form__input form-control" type="text" />
+                                                </div>
+
+                                                <div class="input-group input-group-dynamic mb-3">
+                                                    <label class="form-label">Address</label>
+                                                    <input name="address" class="multisteps-form__input form-control" type="text" />
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <input type="submit" value="Save" class="btn btn-primary">
+                        <!--
+          <button onclick="addItem()" type="submit" class="btn btn-primary" value="Submit" >Save</button>
+-->
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </form>
+            <script>
+                $(document).ready(function() {
+                    // Bind submit event to the form
+                    $('#addVendorForm').submit(function(event) {
+                        // Prevent the form from submitting normally
+                        event.preventDefault();
+
+                        $('#addVendorModal').modal('hide');
+                        // Get the form data
+                        var formData = $(this).serialize();
+
+                        // Send an AJAX request
+                        $.ajax({
+                            type: 'POST',
+                            url: '/api/inv/addVendor',
+                            data: formData,
+                            success: function(response) {
+                                $('#infoModal .modal-body').empty();
+                                $('#infoModal .modal-body').append("<p>"+response+"</p>");
+                                $('#infoModal').modal('show');
+
+                                $('#infoModal #confirmOk').click(function () {
+                                    openVendorsFragment();
+                                })
+                            },
+                            error: function(error) {
+                                $('#infoModal .modal-body').empty();
+                                $('#infoModal .modal-body').append("<p>"+error+"</p>");
+                                $('#infoModal').modal('show');
+                            }
+                        });
+                    });
+                });
+            </script>
+        </div>
+    </div>
+    <div style="z-index: 11000;" aria-hidden="true" aria-labelledby="newTagModalLabel" class="modal fade" id="addGroupModal" role="dialog"
+         tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title font-weight-normal" id="newTagModalLabel">New Group</h5>
+                    <button aria-label="Close" class="btn-close text-dark" data-bs-target="#addGroupModal" data-bs-toggle="modal" type="button">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="/api/inv/addItemGroup" method="post">
+                    <div class="modal-body">
+                        <div class="floating-form-group mb-3">
+                            <input id="itemGroupEdit" class="floating-form-control" name="groupName" placeholder=" " type="text">
+                            <label class="label1" for="itemGroupEdit">Item Group</label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" data-bs-dismiss="modal" type="submit">Add</button>
+                        <button class="btn bg-gradient-secondary" data-bs-dismiss="modal" type="button">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="content" th:fragment="requisition" id="output">
+    <div class="container-fluid py-4">
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card">
+
+                    <div class="card-header">
+                        <h5 class="mb-0">Requisition</h5>
+                        <p class="text-sm mb-0">
+                            Requisition Table.
+                        </p>
+                    </div>
+                    <div class=" me-3 my-3 text-end">
+                        <a class="btn bg-gradient-dark mb-0" onclick="addItemModalLaunch()"><i
+                                class="material-icons text-sm">add</i>&nbsp;&nbsp;Add New
+                            Requisition</a>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-flush" id="requisitionTable">
+                            <thead class="thead-light">
+                            <tr>
+                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                    Date
+                                </th>
+                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                    Items
+                                </th>
+                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                    Department
+                                </th>
+                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                    Requested By
+                                </th>
+                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                    Cost
+                                </th>
+                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                    Status
+                                </th>
+                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                    Action
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="content" th:fragment="purchaseOrders" id="output">
+    <div class="container-fluid py-4">
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card">
+
+                    <div class="card-header">
+                        <h5 class="mb-0">Purchase Orders</h5>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-flush" id="purchaseOrdersTable">
+                            <thead class="thead-light">
+                            <tr>
+                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                    Created On
+                                </th>
+                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                    Expected Delivery
+                                </th>
+                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                    Item
+                                </th>
+                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                    Comments
+                                </th>
+                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                    Cost
+                                </th>
+                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                    Status
+                                </th>
+                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                    Action
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="content" th:fragment="bills" id="output">
+    <div class="container-fluid py-4">
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card">
+
+                    <div class="card-header">
+                        <h5 class="mb-0">Bills</h5>
+                        <p class="text-sm mb-0">
+                            Bills Table.
+                        </p>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-flush" id="billsTable">
+                            <thead class="thead-light">
+                            <tr>
+                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                    Billed On
+                                </th>
+                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                    Vendor
+                                </th>
+                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                    Total
+                                </th>
+                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                    Paid
+                                </th>
+                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                    Outstanding
+                                </th>
+                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                    Status
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="content" th:fragment="items" id="output">
+    <div class="container-fluid py-4">
+        <div class="row">
+            <div class="col-12">
+                <div class="card my-4">
+                    <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                        <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+                            <h6 class="text-white mx-3"><strong>Inventory Items</strong></h6>
+                        </div>
+                    </div>
+                    <div class=" me-3 my-3 text-end">
+                        <a class="btn bg-gradient-dark mb-0" onclick="addItemModalLaunch()"><i
+                                class="material-icons text-sm">add</i>&nbsp;&nbsp;Add New
+                            Item</a>
+                    </div>
+                    <div class="card-body px-0 pb-2">
+                        <div class="table-responsive p-0">
+                            <table class="table align-items-center mb-0" id="itemsTable">
+                                <thead class="thead-light">
+                                <tr>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                        Image
+                                    </th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                        Name
+                                    </th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                        Code
+                                    </th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                        Stock at Hand
+                                    </th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                        Group
+                                    </th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                        Reorder Level
+                                    </th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                        Status
+                                    </th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                        Action
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="addItemModal" class="modal modal-xl" style="z-index: 10000;">
+
+        <div class="modal-dialog">
+
+            <form id="addItemForm">
+                <div class="modal-content">
+
+                    <div class="modal-header bg-gradient-primary" style=";max-height:50px">
+                        <h4 class="modal-title" style="color:white;margin-top:-6px">Add Item</h4>
+                        <button type="button" class="close" data-bs-dismiss="modal">&times;</button>
+                    </div>
+
+                    <div class="modal-body">
+
+                        <div class="content">
+                            <div class="container-fluid">
+
+
+                                <div class="row" style="margin-left:-33px;margin-right:-33px;">
+                                    <div class="col-sm-12 table-responsive">
+                                        <div class="w3-container">
+
+                                            <div id="Londonstudents" class="w3-container  city w3-animate-left">
+                                                <div class="row" style="margin-right:-23px;margin-left:-25px">
+                                                    <div class="col-lg-4 d-flex align-items-stretch" id="firstdiv">
+                                                        <div class="card w-100" id="left">
+
+                                                            <div class="card-header card-header-tabs card-header-primary">
+                                                                <div class="bg-gradient-primary border-radius-lg py-2">
+                                                                    <h4 class="card-title ps-2">Main Details</h4>
+                                                                </div>
+                                                            </div>
+                                                            <div class="card-body table-responsive">
+                                                                <div class="input-group input-group-outline my-3">
+                                                                    <label class="form-label">SKU</label>
+                                                                    <input id="sku" name="sku" class="form-control"
+                                                                           type="text"  required>
+                                                                </div>
+                                                                <div class="input-group input-group-outline my-3">
+                                                                    <label class="form-label">Name</label>
+                                                                    <input name="itemName" class="form-control" type="text"
+                                                                            required>
+                                                                </div>
+
+                                                                <div class="input-group input-group-static my-3">
+                                                                    <select name="uom" type="select"
+                                                                            class="form-select">
+                                                                        <option value="selected">UOM</option>
+                                                                        <option value="Pieces">Pieces</option>
+                                                                        <option value="Bags">Bags</option>
+                                                                        <option value="Kilos">Kilos</option>
+                                                                    </select>
+                                                                </div>
+
+                                                                <div class="input-group input-group-outline my-3">
+                                                                    <input name="itemPrice" class="form-control"
+                                                                           type="text" placeholder=" " required>
+                                                                    <label class="form-label">Item Price</label>
+                                                                </div>
+
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="checkbox"
+                                                                           name="returnable" id="returnable">
+                                                                    <label class="custom-control-label" for="returnable">Returnable Item</label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-4 d-flex align-items-stretch" id="firstdiv">
+
+
+                                                        <div class="card w-100" id="left">
+
+                                                            <div class="card-header card-header-tabs card-header-primary">
+                                                                <div class="bg-gradient-primary border-radius-lg py-2">
+                                                                    <h4 class="card-title ps-2">Other Details</h4>
+                                                                </div>
+                                                            </div>
+                                                            <div class="card-body table-responsive">
+                                                                <div class="input-group input-group-static my-3">
+                                                                    <select name="itemCategory" type="select"
+                                                                            class="form-select">
+                                                                        <option value="selected">Select a category
+                                                                        </option>
+                                                                        <option value="course_book">Permanent</option>
+                                                                        <option value="revision_book">Consumable
+                                                                        </option>
+                                                                    </select>
+                                                                </div>
+
+                                                                <div class="d-flex align-items-center">
+                                                                    <select id="itemGroup" name="itemGroup" class="form-select mb-3" style="width: 197px;">
+                                                                        <option disabled selected>Pick a group</option>
+                                                                        <!-- Add your options here -->
+                                                                    </select>
+                                                                    <button id="newButton" class="btn btn-primary ms-2" onclick="loadNewGroup(event)">New</button>
+                                                                </div>
+
+                                                                <div class="input-group input-group-outline my-3">
+                                                                    <input name="openingStock" class="form-control"
+                                                                           type="text" placeholder=" " required>
+                                                                    <label class="form-label">Opening Stock</label>
+                                                                </div>
+
+                                                                <div class="input-group input-group-outline my-3">
+                                                                    <input name="reorderLevel" class="form-control"
+                                                                           type="text" placeholder=" " required>
+                                                                    <label class="form-label">Reorder Level</label>
+                                                                </div>
+
+                                                                <div class="input-group input-group-outline my-3">
+                                                                    <input name="preferredVendor" class="form-control"
+                                                                           type="text" placeholder=" " required>
+                                                                    <label class="form-label">Preferred Vendor</label>
+                                                                </div>
+
+                                                                <button id="uploadButton" class="btn btn-primary">Upload Image</button>
+                                                            </div>
+
+                                                        </div>
+
+
+                                                    </div>
+                                                    <div class="col-lg-4 d-flex align-items-stretch" id="firstdiv">
+
+
+                                                        <div class="card w-100" id="left">
+
+                                                            <div class="card-header card-header-tabs card-header-primary">
+                                                                <div class="bg-gradient-primary border-radius-lg py-2">
+                                                                    <h4 class="card-title ps-2">Cover Photo</h4>
+                                                                </div>
+                                                            </div>
+                                                            <div class="card-body table-responsive" >
+                                                                <input type="file" id="imageInput" accept="image/*" style="display:none">
+                                                                <input type="hidden" name="imageUrl" id="imageUrl">
+                                                                <div id="imageView" style="width: 100%; height: 300px; border: 1px solid black; background-color: lightgray;"></div>
+                                                            </div>
+                                                        </div>
+
+
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <input type="submit" value="Save" class="btn btn-primary">
+                        <!--
+          <button onclick="addItem()" type="submit" class="btn btn-primary" value="Submit" >Save</button>
+-->
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </form>
+            <script>
+                $(document).ready(function() {
+                    // Bind submit event to the form
+                    $('#addItemForm').submit(function(event) {
+                        // Prevent the form from submitting normally
+                        event.preventDefault();
+
+                        $('#addItemModal').modal('hide');
+                        // Get the form data
+                        var formData = $(this).serialize();
+
+                        // Send an AJAX request
+                        $.ajax({
+                            type: 'POST',
+                            url: '/api/inv/addItem',
+                            data: formData,
+                            success: function(response) {
+                                $('#infoModal .modal-body').empty();
+                                $('#infoModal .modal-body').append("<p>"+response+"</p>");
+                                $('#infoModal').modal('show');
+
+                                $('#infoModal #confirmOk').click(function () {
+                                    openItemsFragment();
+                                })
+                            },
+                            error: function(error) {
+                                $('#infoModal .modal-body').empty();
+                                $('#infoModal .modal-body').append("<p>"+error+"</p>");
+                                $('#infoModal').modal('show');
+                            }
+                        });
+                    });
+                });
+            </script>
+        </div>
+    </div>
+    <div style="z-index: 11000;" aria-hidden="true" aria-labelledby="newTagModalLabel" class="modal fade" id="addGroupModal" role="dialog"
+         tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title font-weight-normal" id="newTagModalLabel">New Group</h5>
+                    <button aria-label="Close" class="btn-close text-dark" data-bs-target="#addGroupModal" data-bs-toggle="modal" type="button">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="/api/inv/addItemGroup" method="post">
+                    <div class="modal-body">
+                        <div class="floating-form-group mb-3">
+                            <input id="itemGroupEdit" class="floating-form-control" name="groupName" placeholder=" " type="text">
+                            <label class="label1" for="itemGroupEdit">Item Group</label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" data-bs-dismiss="modal" type="submit">Add</button>
+                        <button class="btn bg-gradient-secondary" data-bs-dismiss="modal" type="button">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="content" th:fragment="assetManagement" id="output">
+    <div class="container-fluid py-4">
+        <div class="row">
+            <div class="col-12">
+                <div class="card my-4">
+                    <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                        <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+                            <h6 class="text-white mx-3"><strong>Assets</strong></h6>
+                        </div>
+                    </div>
+                    <div class=" me-3 my-3 text-end">
+                        <a class="btn bg-gradient-dark mb-0 me-3" onclick="depreciateAll()"><i
+                                class="material-icons text-sm">remove</i>&nbsp;&nbsp;Depreciate All</a>
+                        <a class="btn bg-gradient-dark mb-0" onclick="addAssetManagementModalLaunch()"><i
+                                class="material-icons text-sm">add</i>&nbsp;&nbsp;Add New
+                            Asset</a>
+                    </div>
+                    <div class="card-body px-0 pb-2">
+                        <div class="table-responsive p-0">
+                            <table class="table align-items-center mb-0" id="assetsTable">
+                                <thead class="thead-light">
+                                <tr>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                        Serial Number
+                                    </th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                        Asset Name
+                                    </th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                        Type
+                                    </th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                        Description
+                                    </th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                        Book Value
+                                    </th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                        Status
+                                    </th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                        Action
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="addAssetModal" class="modal modal-xl" style="z-index: 10000;">
+
+        <div class="modal-dialog">
+
+            <form id="addAssetForm">
+                <div class="modal-content">
+
+                    <div class="modal-header bg-gradient-primary" style=";max-height:50px">
+                        <h4 class="modal-title" style="color:white;margin-top:-6px">Add Asset</h4>
+                        <a class="close" data-bs-dismiss="modal">&times;</a>
+                    </div>
+
+                    <div class="modal-body">
+
+                        <div class="content">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-lg-4 d-flex align-items-stretch" id="firstdiv">
+                                        <div class="card w-100" id="left">
+
+                                            <div class="card-body table-responsive">
+                                                <div class="input-group input-group-dynamic mb-3">
+                                                    <label class="form-label">Asset Name</label>
+                                                    <input name="name" class="multisteps-form__input form-control" type="text" />
+                                                </div>
+                                                <div class="input-group input-group-dynamic mb-3">
+                                                    <label class="form-label">Asset Serial Number</label>
+                                                    <input name="serial" class="multisteps-form__input form-control" type="text" />
+                                                </div>
+
+                                                <select id="type" name="type" class="form-select mb-3">
+                                                    <option disabled selected>Asset Type</option>
+                                                    <option value="Machinery">Machinery</option>
+                                                    <option value="Buildings and Machinery">Buildings and Machinery</option>
+                                                    <option value="Vehicles">Vehicles</option>
+                                                    <option value="Furniture">Furniture</option>
+                                                    <option value="Computer Equipment">Fixtures</option>
+                                                    <option value="Fixtures">Fixtures</option>
+                                                </select>
+
+                                                <select id="status" name="status" class="form-select mb-3">
+                                                    <option disabled selected>Asset Status</option>
+                                                    <option value="Dormant">Dormant</option>
+                                                    <option value="In Use">In Use</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 d-flex align-items-stretch" id="firstdiv">
+                                        <div class="card w-100" id="left">
+                                            <div class="card-body table-responsive">
+                                                <div class="d-flex align-items-center">
+                                                    <select id="deprecationMethod" name="deprecationMethod" class="form-select mb-3">
+                                                        <option disabled selected>Deprecation Method</option>
+                                                        <option value="Double Declining">Double Declining</option>
+                                                        <option value="Reducing Balance">Reducing Balance</option>
+                                                        <option value="Straight Line">Straight line</option>
+                                                        <option value="Sum of Years">Sum of Years</option>
+                                                    </select>
+                                                </div>
+
+                                                <div class="input-group input-group-dynamic mb-3">
+                                                    <label class="form-label">Rate</label>
+                                                    <input name="rate" class="multisteps-form__input form-control" type="text" />
+                                                </div>
+
+                                                <div class="d-flex align-items-center">
+                                                    <select id="period" name="period" class="form-select mb-3">
+                                                        <option disabled selected>Period</option>
+                                                        <option value="Yearly">Yearly</option>
+                                                        <option value="Half-Yearly">Half-Yearly</option>
+                                                        <option value="Quarterly">Quarterly</option>
+                                                        <option value="Monthly">Monthly</option>
+                                                    </select>
+                                                </div>
+
+                                                <div class="input-group input-group-dynamic mb-3">
+                                                    <label class="form-label">Useful Life (Years)</label>
+                                                    <input name="usefulLife" class="multisteps-form__input form-control" type="number" />
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+
+                                    </div>
+                                    <div class="col-lg-4 d-flex align-items-stretch" id="firstdiv">
+                                        <div class="card w-100" id="left">
+                                            <div class="card-body table-responsive">
+                                                <div class="input-group input-group-dynamic mb-3">
+                                                    <label class="form-label">Asset Location</label>
+                                                    <input name="location" class="multisteps-form__input form-control" type="text" />
+                                                </div>
+
+                                                <div class="input-group input-group-dynamic mb-3">
+                                                    <label class="form-label">Used by</label>
+                                                    <input name="usedBy" class="multisteps-form__input form-control" type="text" />
+                                                </div>
+
+                                                <div class="input-group input-group-dynamic mb-3">
+                                                    <label class="form-label">Asset Opening Balance</label>
+                                                    <input name="openingBalance" class="multisteps-form__input form-control" type="number" />
+                                                </div>
+
+                                                <div class="input-group input-group-dynamic mb-3">
+                                                    <label class="form-label">Opening balance as at</label>
+                                                    <input name="balanceAt" class="multisteps-form__input form-control" type="date" />
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12 d-flex align-items-stretch">
+                                        <div class="input-group">
+                                            <label for="description"></label>
+                                            <textarea class="floating-form-control" name="description" id="description"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <input type="submit" value="Save" class="btn btn-primary">
+                        <!--
+          <button onclick="addItem()" type="submit" class="btn btn-primary" value="Submit" >Save</button>
+-->
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </form>
+            <script>
+                $(document).ready(function() {
+                    // Bind submit event to the form
+                    $('#addAssetForm').submit(function(event) {
+                        // Prevent the form from submitting normally
+                        event.preventDefault();
+
+                        $('#addAssetModal').modal('hide');
+                        // Get the form data
+                        var formData = $(this).serialize();
+
+                        // Send an AJAX request
+                        $.ajax({
+                            type: 'POST',
+                            url: '/api/inv/addAsset',
+                            data: formData,
+                            success: function(response) {
+                                $('#infoModal .modal-body').empty();
+                                $('#infoModal .modal-body').append("<p>"+response+"</p>");
+                                $('#infoModal').modal('show');
+
+                                $('#infoModal #confirmOk').click(function () {
+                                    openAssetManagementFragment();
+                                })
+                            },
+                            error: function(error) {
+                                $('#infoModal .modal-body').empty();
+                                $('#infoModal .modal-body').append("<p>"+error+"</p>");
+                                $('#infoModal').modal('show');
+                            }
+                        });
+                    });
+                });
+            </script>
+        </div>
+    </div>
+</div>
+
+<div class="content" th:fragment="issueItems" id="output">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header card-header-primary">
+                        <h4 class="card-title">Issue Item</h4>
+                    </div>
+                    <div class="card-body">
+                        <select name="recipeintType" id="recipientType">
+                            <option disabled selected>Choose recipient category</option>
+                            <option value="Student">Student</option>
+                            <option value="Teacher">Teacher</option>
+                            <option value="Staff">Staff</option>
+                        </select>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div id="person" class="input-group input-group-outline">
+                                    <input id="searchPerson" onkeyup="searchPerson()" type="text" placeholder="Search Recipient" class="form-control">
+                                    <div class="searchResults"></div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div id="book" class="input-group input-group-outline">
+                                    <input type="text" class="form-control" id="searchTitle" onkeyup="searchItem()"
+                                           placeholder="Search Item">
+                                    <div class="searchResults"></div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="input-group input-group-outline">
+                                    <input type="date" class="form-control" id="returnDate" placeholder=" ">
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="row">
+                                    <div class="input-group input-group-dynamic col-md-6">
+                                        <label class="form-label">Quantity</label>
+                                        <input id="quantity" name="quantity" class="multisteps-form__input form-control" type="number" />
+                                    </div>
+                                    <div class="form-group bmd-form-group col-md-6">
+                                        <div class="input-group">
+                                            <button onclick="addItemToIssueList()" class="btn btn-primary w-100">Add</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="table-responsive card py-5 px-1" id="table-container">
+                                    <table id="pendingIssueTable" class="table dt-responsive nowrap text-center align-items-center" style="width:100%">
+                                        <thead class="text-primary">
+                                        <tr>
+                                            <th class="text-center">Image</th>
+                                            <th class="text-center"><input type="hidden" name="itemId" id="itemId">Item</th>
+                                            <th class="text-center">Quantity</th>
+                                            <th class="text-center">Value</th>
+                                            <th class="text-center">Return Date</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <div class="d-flex flex-row-reverse">
+                                        <button class="btn btn-primary" id="saveButton" onclick="SaveIssue()">Save</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group bmd-form-group">
+                                    <label>Total Issued:</label>
+                                    <label class="labelTotalIssued" id="labelTotalIssued"></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+<div class="content" th:fragment="returnItems" id="output">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-9">
+                <div class="table-responsive card py-5 px-1">
+                    <table id="returnItemsTable" class="table dt-responsive nowrap text-center align-items-center" style="width:100%">
+                        <thead>
+                        <tr>
+                            <th class="text-center">Name</th>
+                            <th class="text-center">Quantity</th>
+                            <th class="text-center">Value</th>
+                            <th class="text-center">Issued On</th>
+                            <th class="text-center">Return Date</th>
+                            <th class="text-center">Status</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class=" card col-md-3">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="input-group input-group-dynamic mb-3">
+                            <label class="form-label">Amount Returned</label>
+                            <input name="amount" class="multisteps-form__input form-control" type="number" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-group input-group-outline mt-3 col-md-12">
+                            <textarea id="comment" name="comment" class="form-control" rows="3" placeholder="Comment"></textarea>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 mt-3">
+                            <button type="button" onclick="returnTheItem()" class="btn btn-primary">Return</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
