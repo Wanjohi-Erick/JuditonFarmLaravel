@@ -9,7 +9,9 @@ class Items extends Model
 {
     use HasFactory;
 
-    public function itemStock() {
-        return $this->belongsTo(ItemStock::class, 'item_id');
+    protected $table = 'items';
+    public function itemStock()
+    {
+        return $this->hasOne(ItemStock::class, 'item_id');
     }
 }

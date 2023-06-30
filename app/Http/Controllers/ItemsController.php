@@ -8,18 +8,13 @@ use App\Models\Items;
 use App\Models\ItemStock;
 use App\Models\Vendors;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class ItemsController extends Controller
 {
     public function getAllItems() {
-        $items = DB::table('items')
-            ->select('*')
-            ->leftJoin('item_stocks', 'items.id', '=', 'item_stocks.item_id')
-            ->get();
-
-        return response()->json($items);
+        $items = Items::with('itemStock')->get();
+        return $items;
     }
 
     public function index()

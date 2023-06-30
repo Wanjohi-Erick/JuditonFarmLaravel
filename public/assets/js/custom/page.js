@@ -71,3 +71,8 @@ function openDeleteModal(url) {
         window.location.href = url;
     })
 }
+
+function openAddGroupModal() {
+    $('#addPigModal').modal('hide');
+    $('#addGroupModal').modal('show');
+}

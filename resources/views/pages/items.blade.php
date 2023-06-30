@@ -34,10 +34,10 @@
                                     <thead class="thead-light">
                                     <tr>
                                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                            Name
+                                            #
                                         </th>
                                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                            Code
+                                            Name
                                         </th>
                                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                             Stock at Hand
@@ -57,14 +57,21 @@
                                     </tr>
                                     </thead>
                                     <tbody>
+                                    @php
+                                        $serial = 1;
+                                    @endphp
                                     @foreach ($items as $item)
+
+                                        @php
+                                            $status = ($item->amount < $item->reorder_level) ? "Insufficient Stock" : "Sufficient Stock";
+                                        @endphp
                                         <tr>
+                                            <td class="text-center">{{ $serial }}</td>
                                             <td class="text-center">{{ $item->item_name }}</td>
-                                            <td class="text-center">{{ $item->id }}</td>
-                                            <td class="text-center">{{ $item->amount }}</td>
+                                            <td class="text-center">{{ $item->itemStock->amount }}</td>
                                             <td class="text-center">{{ $item->item_group }}</td>
                                             <td class="text-center">{{ $item->reorder_level }}</td>
-                                            <td class="text-center">{{ $item->amount }}</td>
+                                            <td class="text-center">{{ $status }}</td>
                                             <td class="text-center">
                                                 <a href="/item/{{$item->id}}/view" class="btn btn-success mb-0"><i
                                                         class="material-icons text-sm">visibility</i></a> | <a
@@ -76,6 +83,7 @@
                                                         class="material-icons text-sm">delete</i></a>
                                             </td>
                                         </tr>
+                                        @php($serial++)
                                     @endforeach
                                     </tbody>
                                 </table>
@@ -191,7 +199,7 @@
                                                                         @endforeach
                                                                     </select>
                                                                     <button id="newButton" class="btn btn-primary ms-2"
-                                                                            onclick="loadNewGroup(event)">New
+                                                                            onclick="openAddGroupModal()">New
                                                                     </button>
                                                                 </div>
 
@@ -264,6 +272,33 @@
             </div>
         </div>
     </div>
+
+    <div style="z-index: 11000;" aria-hidden="true" aria-labelledby="newTagModalLabel" class="modal fade" id="addGroupModal" role="dialog"
+         tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title font-weight-normal" id="newTagModalLabel">New Group</h5>
+                    <button aria-label="Close" class="btn-close text-dark" data-bs-target="#addGroupModal" data-bs-toggle="modal" type="button">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="/api/inv/addItemGroup" method="post">
+                    <div class="modal-body">
+                        <div class="floating-form-group mb-3">
+                            <input id="itemGroupEdit" class="floating-form-control" name="groupName" placeholder=" " type="text">
+                            <label class="label1" for="itemGroupEdit">Item Group</label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" data-bs-dismiss="modal" type="submit">Add</button>
+                        <button class="btn bg-gradient-secondary" data-bs-dismiss="modal" type="button">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
 
     <div class="modal fade" id="modal-delete" tabindex="-1" role="dialog" aria-labelledby="modal-delete"
          aria-hidden="true">
