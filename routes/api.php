@@ -25,11 +25,3 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('getAllAnimals', [AnimalCategoryController::class, 'getAllAnimals'])->name('allAnimals');
-Route::get('getAllFarmAnimals', [AllFarmAnimalsController::class, 'getAllAnimals'])->name('allFarmAnimals');
-Route::get('getAllBreeds', [BreedController::class, 'getAllBreeds'])->name('allBreeds');
-Route::get('getAllWeights', [AnimalWeightController::class, 'show'])->name('allWeights');
-Route::get('getAllTreatments', [AnimalTreatmentController::class, 'getAllAnimalTreatments'])->name('allTreatments');
-Route::get('getAllItems', [ItemsController::class, 'getAllItems'])->name('allItems');
-Route::get('getItemStock', [ItemStockController::class, 'getAllItems'])->name('stock');
-

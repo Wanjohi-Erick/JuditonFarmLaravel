@@ -1,10 +1,14 @@
 <?php
 
 use App\Http\Controllers\AnimalTreatmentController;
+use App\Http\Controllers\AnimalWeightController;
 use App\Http\Controllers\BreedController;
 use App\Http\Controllers\AnimalCategoryController;
 use App\Http\Controllers\AllFarmAnimalsController;
+use App\Http\Controllers\ItemGroupController;
 use App\Http\Controllers\ItemsController;
+use App\Http\Controllers\ItemStockController;
+use App\Http\Controllers\VendorsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -79,12 +83,19 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/animalTreatment/{id}/view', [AnimalTreatmentController::class, 'view'])->name('animalTreatment.view');
     Route::put('/animalTreatment/{id}/update', [AnimalTreatmentController::class, 'update'])->name('animalTreatment.update');
     Route::get('/animalTreatment/{id}/delete', [AnimalTreatmentController::class, 'delete'])->name('animalTreatment.delete');
-    Route::get('items', [ItemsController::class, 'index'])->name('items');
-    Route::post('/save-item', [ItemsController::class, 'save'])->name('saveItem');
+    Route::get('items', function () {
+        return view('pages.items');
+    })->name('items');
+
+    Route::post('/save-item', [ItemsController::class, 'store'])->name('saveItem');
+    Route::post('/restock-item', [ItemsController::class, 'restock'])->name('restockItem');
     Route::get('/item/{id}/find', [ItemsController::class, 'find'])->name('item.find');
     Route::get('/item/{id}/view', [ItemsController::class, 'view'])->name('item.view');
     Route::put('/item/{id}/update', [ItemsController::class, 'update'])->name('item.update');
-    Route::get('/item/{id}/delete', [ItemsController::class, 'delete'])->name('item.delete');
+    Route::get('/item/{id}/delete', [ItemsController::class, 'destroy'])->name('item.delete');
+    Route::post('/save-item-group', [ItemGroupController::class, 'save'])->name('saveItemGroup');
+    Route::get('getItemGroups', [ItemGroupController::class, 'getAllGroups'])->name('groups');
+    Route::get('getVendors', [VendorsController::class, 'getAllVendors'])->name('vendors');
 
     Route::get('log-viewer', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index')->name('log-viewer');
 
@@ -101,7 +112,16 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('user-management', function () {
 		return view('pages.laravel-examples.user-management');
 	})->name('user-management');
-	Route::get('user-profile', function () {
-		return view('pages.laravel-examples.user-profile');
-	})->name('user-profile');
+    Route::get('user-profile', [ProfileController::class, 'view'])->name('user-profile');
+
+
+    //api routes
+    Route::get('getAllAnimals', [AnimalCategoryController::class, 'getAllAnimals'])->name('allAnimals');
+    Route::get('getAllFarmAnimals', [AllFarmAnimalsController::class, 'getAllAnimals'])->name('allFarmAnimals');
+    Route::get('getAllBreeds', [BreedController::class, 'getAllBreeds'])->name('allBreeds');
+    Route::get('getAllWeights', [AnimalWeightController::class, 'show'])->name('allWeights');
+    Route::get('getAllTreatments', [AnimalTreatmentController::class, 'getAllAnimalTreatments'])->name('allTreatments');
+    Route::get('getAllItems', [ItemsController::class, 'getAllItems'])->name('allItems');
+    Route::get('getItemStock', [ItemStockController::class, 'getAllItems'])->name('stock');
+
 });

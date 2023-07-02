@@ -10,6 +10,10 @@ function openModal() {
     $('#addPigModal').modal('show');
 }
 
+function openRestockModal() {
+    $('#restockModal').modal('show');
+}
+
 function openEditModal(url) {
 
 
@@ -70,4 +74,146 @@ function openDeleteModal(url) {
     $('#confirmDelete').click(function () {
         window.location.href = url;
     })
+}
+
+function openAddGroupModal() {
+    $('#addPigModal').modal('hide');
+    $('#addGroupModal').modal('show');
+}
+
+function deleteItem(url) {
+    $('#modal-delete').modal('show');
+    $('#confirmDelete').on('click', function() {
+        $('#modal-delete').modal('hide');
+        $.ajax({
+            url: url,
+            method: 'GET',
+            contentType: 'application/json'
+        }).done(function (response) {
+            $('#successMessage').text(response.message).show();
+            location.reload();
+        }).fail(function(fail) {
+            $('#failureMessage').text(fail).show();
+        })
+    })
+}
+
+$(document).ready(function() {
+    // Bind submit event to the form
+    $('#addItemForm').submit(function(event) {
+        // Prevent the form from submitting normally
+        event.preventDefault();
+
+        $('#addPigModal').modal('hide');
+        // Get the form data
+        var formData = $(this).serialize();
+
+        // Send an AJAX request
+        $.ajax({
+            type: 'POST',
+            url: '/save-item',
+            data: formData,
+            success: function(response) {
+                $('#successMessage').text(response.message).show();
+                location.reload();
+            },
+            error: function(error) {
+                console.log(error);
+                $('#failureMessage').text(error.responseJSON.error).show();
+                setTimeout(function () {
+                    $('#failureMessage').hide();
+                }, 2000);
+            }
+        });
+    });
+    $('#addGroupForm').submit(function (event) {
+        event.preventDefault();
+        $('#addGroupModal').modal('hide');
+        // Get the form data
+        var formData = $(this).serialize();
+
+        // Send an AJAX request
+        $.ajax({
+            type: 'POST',
+            url: '/save-item-group',
+            data: formData,
+            success: function(response) {
+                $('#successMessage').text(response.message).show();
+                openModal();
+            },
+            error: function(error) {
+                console.log(error);
+                $('#failureMessage').text(error.responseJSON.message).show();
+                setTimeout(function () {
+                    $('#failureMessage').hide();
+                }, 2000);
+            }
+        });
+    })
+
+    $('#restockItemForm').submit(function (event) {
+        event.preventDefault();
+        $('#restockModal').modal('hide');
+        // Get the form data
+        var formData = $(this).serialize();
+
+        // Send an AJAX request
+        $.ajax({
+            type: 'POST',
+            url: '/restock-item',
+            data: formData,
+            success: function(response) {
+                $('#successMessage').text(response.message).show();
+                location.reload();
+            },
+            error: function(error) {
+                console.log(error);
+                $('#failureMessage').text(response.error).show();
+                setTimeout(function () {
+                    $('#failureMessage').hide();
+                }, 2000);
+            }
+        });
+    })
+});
+
+function getGroups() {
+    return new Promise(function (resolve, reject) {
+        $.ajax({
+            url: '/getItemGroups',
+            success: function (data) {
+                resolve(data);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                reject(errorThrown);
+            }
+        });
+    });
+}
+
+function getVendors() {
+    return new Promise(function (resolve, reject) {
+        $.ajax({
+            url: '/getVendors',
+            success: function (data) {
+                resolve(data);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                reject(errorThrown);
+            }
+        });
+    });
+}
+function getItems() {
+    return new Promise(function (resolve, reject) {
+        $.ajax({
+            url: '/getAllItems',
+            success: function (data) {
+                resolve(data);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                reject(errorThrown);
+            }
+        });
+    });
 }

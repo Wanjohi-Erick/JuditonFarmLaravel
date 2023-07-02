@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\AllAnimals;
 use App\Models\AnimalTreatment;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -30,14 +31,15 @@ class AnimalTreatmentController extends Controller
                 'type' => 'required',
                 'product' => 'required',
                 'application_method' => 'required',
-                'days_until_withdrawal' => 'required|numeric',
+                'days_until_withdrawal' => 'nullable|numeric',
                 'technician' => 'required',
                 'dosage' => 'required|numeric',
                 'treatment_date' => 'required|date',
                 'body_part' => 'required',
-                'booster_date' => 'required|date',
+                'booster_date' => 'nullable|date',
                 'total_cost' => 'required|numeric',
                 'description' => 'nullable',
+                'transaction_reference' => 'nullable'
             ]);
 
             // Create a new AnimalTreatment instance
@@ -54,9 +56,18 @@ class AnimalTreatmentController extends Controller
             $animalTreatment->booster_date = $validatedData['booster_date'];
             $animalTreatment->total_cost = $validatedData['total_cost'];
             $animalTreatment->description = $validatedData['description'];
+            $animalTreatment->farm = request()->user()->farm;
 
             // Save the animal data
             if ($animalTreatment->save()) {
+                $transaction = new Transaction();
+                $transaction->reference = $validatedData['transaction_reference'];
+                $transaction->type = 'OUTBOUND';
+                $transaction->description = $this->find($animalTreatment->id)->product . ' animal treatment transaction';
+                $transaction->amount = $validatedData['total_cost'];
+                $transaction->status = 'PAID';
+                $transaction->farm = request()->user()->farm;
+                $transaction->save();
                 return redirect()->route('animalTreatment')->with('success', 'Treatment recorded successfully.');
             } else {
                 return redirect()->route('animalTreatment')->with('fail', 'Failed to record treatment.');

@@ -5,17 +5,8 @@
         <x-navbars.navs.auth titlePage="Items"></x-navbars.navs.auth>
         <!-- End Navbar -->
         <div class="container-fluid py-4">
-            @if(session('success'))
-                <div id="successMessage" class="alert alert-success">
-                    {{ session('success') }}
-                </div>
-            @endif
-
-            @if(session('fail'))
-                <div id="failureMessage" class="alert alert-danger">
-                    {{ session('fail') }}
-                </div>
-            @endif
+            <div id="successMessage" class="alert alert-success" style="display: none;"></div>
+            <div id="failureMessage" class="alert alert-danger" style="display: none;"></div>
             <div class="row">
                 <div class="col-12">
                     <div class="card my-4">
@@ -25,7 +16,9 @@
                             </div>
                         </div>
                         <div class=" me-3 my-3 text-end">
-                            <a onclick="openModal()" class="btn bg-gradient-dark mb-0" href="javascript:;"><i
+                            <a onclick="openRestockModal()" class="btn bg-gradient-dark mb-0" href="javascript:;"><i
+                                    class="material-icons text-sm">add</i>&nbsp;&nbsp;Restock Item</a>
+                            <a onclick="openModal()" class="btn bg-gradient-dark mb-0 ms-3" href="javascript:;"><i
                                     class="material-icons text-sm">add</i>&nbsp;&nbsp;Add Item</a>
                         </div>
                         <div class="card-body px-0 pb-2">
@@ -33,11 +26,11 @@
                                 <table class="table align-items-center mb-0" id="itemsTable">
                                     <thead class="thead-light">
                                     <tr>
+                                       {{-- <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                            #
+                                        </th>--}}
                                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                             Name
-                                        </th>
-                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                            Code
                                         </th>
                                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                             Stock at Hand
@@ -57,26 +50,66 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    @foreach ($items as $item)
-                                        <tr>
-                                            <td class="text-center">{{ $item->item_name }}</td>
-                                            <td class="text-center">{{ $item->id }}</td>
-                                            <td class="text-center">{{ $item->amount }}</td>
-                                            <td class="text-center">{{ $item->item_group }}</td>
-                                            <td class="text-center">{{ $item->reorder_level }}</td>
-                                            <td class="text-center">{{ $item->amount }}</td>
-                                            <td class="text-center">
-                                                <a href="/item/{{$item->id}}/view" class="btn btn-success mb-0"><i
-                                                        class="material-icons text-sm">visibility</i></a> | <a
-                                                    onclick="openEditModal('/item/' + {{$item->id}} + '/find')"
-                                                    class="btn btn-warning mb-0"><i
-                                                        class="material-icons text-sm">edit</i></a> | <a
-                                                    onclick="openDeleteModal('/item/' + {{$item->id}} + '/delete')"
-                                                    class="btn btn-danger mb-0"><i
-                                                        class="material-icons text-sm">delete</i></a>
-                                            </td>
-                                        </tr>
-                                    @endforeach
+                                    <script>
+                                        $(document).ready(function () {
+                                            $.get('/getAllItems', function (data) {
+                                                $('#itemsTable').DataTable({
+                                                    responsive: true,
+                                                    "data": data, "columns": [
+                                                        {
+                                                        "data": "item_name", "render": function (data, type, row, meta) {
+                                                            return '<p class="text-xs text-secondary mb-0">' + data + '</p>';
+                                                        }, "createdCell": function (td, cellData, rowData, row, col) {
+                                                            $(td).addClass('align-middle text-center text-sm');
+                                                        }
+                                                    }, {
+                                                        "data": "item_stock[0].amount", "render": function (data, type, row, meta) {
+                                                            return '<p class="text-xs text-secondary mb-0">' + data + '</p>';
+                                                        }, "createdCell": function (td, cellData, rowData, row, col) {
+                                                            $(td).addClass('align-middle text-center text-sm');
+                                                        }
+                                                    }, {
+                                                        "data": "item_group", "render": function (data, type, row, meta) {
+                                                            return '<p class="text-xs text-secondary mb-0">' + data + '</p>';
+                                                        }, "createdCell": function (td, cellData, rowData, row, col) {
+                                                            $(td).addClass('align-middle text-center text-sm');
+                                                        }
+                                                    }, {
+                                                        "data": "reorder_level", "render": function (data, type, row, meta) {
+                                                            return '<p class="text-xs text-secondary mb-0">' + data + '</p>';
+                                                        }, "createdCell": function (td, cellData, rowData, row, col) {
+                                                            $(td).addClass('align-middle text-center text-sm');
+                                                        }
+                                                    }, {
+                                                            "data": "item_stock[0].amount",
+                                                            "render": function (data, type, row, meta) {
+                                                                // Compare the values and apply custom styling
+                                                                var comparisonResult = data >= row.reorder_level ? 'text-success' : 'text-danger';
+                                                                var status = data >= row.reorder_level ? 'Sufficient Stock' : 'Insufficient Stock';
+                                                                return '<p class="text-xs ' + comparisonResult + ' mb-0">' + status + '</p>';
+                                                            },
+                                                            "createdCell": function (td, cellData, rowData, row, col) {
+                                                                $(td).addClass('align-middle text-center text-sm');
+                                                            }
+                                                        }, {
+                                                        "data": "id", "render": function (data, type, row, meta) {
+                                                            return `
+                                          <button class="btn btn-link text-secondary mb-0" id="navbarDropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                          <i class="fa fa-ellipsis-v text-xs"></i>
+                                            </button>
+                                        <div class="dropdown-menu dropdown-menu-end me-sm-n4 me-n3" aria-labelledby="navbarDropdownMenuLink">
+                                            <a onclick="editItem('${data}')" class="dropdown-item" href="javascript:;">Edit</a>
+                                            <a onclick="deleteItem('/item/${data}/delete')" class="dropdown-item" href="javascript:;">Delete</a>
+                                         </div>
+                                            `;
+                                                        }, "createdCell": function (td, cellData, rowData, row, col) {
+                                                            $(td).addClass('align-middle text-center text-sm');
+                                                        }
+                                                    }]
+                                                })
+                                            });
+                                        });
+                                    </script>
                                     </tbody>
                                 </table>
                             </div>
@@ -88,7 +121,7 @@
         </div>
     </main>
     <div aria-hidden="true" aria-labelledby="addPigModal" class="modal fade" id="addPigModal" role="dialog">
-        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title font-weight-normal" id="settingsModalLabel">Add Item</h5>
@@ -105,26 +138,14 @@
                             <div class="row" style="margin-left:-33px;margin-right:-33px;">
                                 <div class="col-sm-12 table-responsive">
                                     <div class="w3-container">
-                                        <form method="POST" action="{{ route('saveItem') }}"
+                                        <form method="POST" id="addItemForm"
                                               enctype="multipart/form-data">
                                             @csrf <!-- Add this line to include the CSRF token -->
                                             <div id="Londonstudents" class="w3-container  city w3-animate-left">
                                                 <div class="row" style="margin-right:-23px;margin-left:-25px">
-                                                    <div class="col-lg-4 d-flex align-items-stretch" id="firstdiv">
+                                                    <div class="col-lg-6 d-flex align-items-stretch" id="firstdiv">
                                                         <div class="card w-100" id="left">
-
-                                                            <div
-                                                                class="card-header card-header-tabs card-header-primary">
-                                                                <div class="bg-gradient-primary border-radius-lg py-2">
-                                                                    <h4 class="card-title ps-2">Main Details</h4>
-                                                                </div>
-                                                            </div>
                                                             <div class="card-body table-responsive">
-                                                                <div class="input-group input-group-outline my-3">
-                                                                    <label class="form-label">SKU</label>
-                                                                    <input id="sku" name="sku" class="form-control"
-                                                                           type="text" required>
-                                                                </div>
                                                                 <div class="input-group input-group-outline my-3">
                                                                     <label class="form-label">Name</label>
                                                                     <input name="itemName" class="form-control"
@@ -148,28 +169,6 @@
                                                                     <label class="form-label">Item Price</label>
                                                                 </div>
 
-                                                                <div class="form-check">
-                                                                    <input class="form-check-input" type="checkbox"
-                                                                           name="returnable" id="returnable">
-                                                                    <label class="custom-control-label"
-                                                                           for="returnable">Returnable
-                                                                        Item</label>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-4 d-flex align-items-stretch" id="firstdiv">
-
-
-                                                        <div class="card w-100" id="left">
-
-                                                            <div
-                                                                class="card-header card-header-tabs card-header-primary">
-                                                                <div class="bg-gradient-primary border-radius-lg py-2">
-                                                                    <h4 class="card-title ps-2">Other Details</h4>
-                                                                </div>
-                                                            </div>
-                                                            <div class="card-body table-responsive">
                                                                 <div class="input-group input-group-static my-3">
                                                                     <select name="itemCategory" type="select"
                                                                             class="form-select">
@@ -181,17 +180,37 @@
                                                                     </select>
                                                                 </div>
 
+                                                                <div class="input-group input-group-outline my-3">
+                                                                    <input name="transaction_reference" class="form-control"
+                                                                           type="text" placeholder=" " required>
+                                                                    <label class="form-label">Transaction Reference</label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-6 d-flex align-items-stretch" id="firstdiv">
+
+
+                                                        <div class="card w-100" id="left">
+                                                            <div class="card-body table-responsive">
                                                                 <div class="d-flex align-items-center">
-                                                                    <select id="itemGroup" name="itemGroup"
-                                                                            class="form-select mb-3"
-                                                                            style="width: 197px;">
+                                                                    <select id="itemGroup" name="itemGroup" class="form-select my-3" style="width: 197px;">
                                                                         <option disabled selected>Pick a group</option>
-                                                                        @foreach($itemGroups as $itemGroup)
-                                                                            <option value="{{$itemGroup->id}}">{{$itemGroup->group_name}}</option>
-                                                                        @endforeach
+                                                                        <script>
+                                                                            $(document).ready(function() {
+                                                                                getGroups().then(function (response) {
+                                                                                    $.each(response, function (index, data) {
+                                                                                        let option = $('<option value="' + data.group_name + '">' + data.group_name + '</option>');
+                                                                                        $('#addPigModal #itemGroup').append(option);
+                                                                                    })
+                                                                                }).catch(function (error) {
+                                                                                    console.log(error);
+                                                                                })
+                                                                            })
+                                                                        </script>
                                                                     </select>
                                                                     <button id="newButton" class="btn btn-primary ms-2"
-                                                                            onclick="loadNewGroup(event)">New
+                                                                            onclick="openAddGroupModal()">New
                                                                     </button>
                                                                 </div>
 
@@ -209,37 +228,19 @@
 
                                                                 <select id="preferredVendor" name="preferredVendor" class="form-select mb-3">
                                                                     <option disabled selected>Pick the vendor</option>
-                                                                    @foreach($vendors as $vendor)
-                                                                        <option value="{{$vendor->id}}">{{$vendor->company}}</option>
-                                                                    @endforeach
+                                                                    <script>
+                                                                        $(document).ready(function() {
+                                                                            getVendors().then(function (response) {
+                                                                                $.each(response, function (index, data) {
+                                                                                    let option = $('<option value="' + data.id + '">' + data.company + '</option>');
+                                                                                    $('#addPigModal #preferredVendor').append(option);
+                                                                                })
+                                                                            }).catch(function (error) {
+                                                                                console.log(error);
+                                                                            })
+                                                                        })
+                                                                    </script>
                                                                 </select>
-
-                                                                <button id="uploadButton" class="btn btn-primary">Upload
-                                                                    Image
-                                                                </button>
-                                                            </div>
-
-                                                        </div>
-
-
-                                                    </div>
-                                                    <div class="col-lg-4 d-flex align-items-stretch" id="firstdiv">
-
-
-                                                        <div class="card w-100" id="left">
-
-                                                            <div
-                                                                class="card-header card-header-tabs card-header-primary">
-                                                                <div class="bg-gradient-primary border-radius-lg py-2">
-                                                                    <h4 class="card-title ps-2">Cover Photo</h4>
-                                                                </div>
-                                                            </div>
-                                                            <div class="card-body table-responsive">
-                                                                <input type="file" id="imageInput" accept="image/*"
-                                                                       style="display:none">
-                                                                <input type="hidden" name="imageUrl" id="imageUrl">
-                                                                <div id="imageView"
-                                                                     style="width: 100%; height: 300px; border: 1px solid black; background-color: lightgray;"></div>
                                                             </div>
                                                         </div>
 
@@ -265,16 +266,116 @@
         </div>
     </div>
 
+    <div aria-hidden="true" aria-labelledby="restockModal" class="modal fade" id="restockModal" role="dialog">
+        <div class="modal-dialog modal-dialog-centered modal" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title font-weight-normal" id="settingsModalLabel">Restock Item</h5>
+                    <button aria-label="Close" class="btn-close text-dark" data-bs-dismiss="modal" type="button">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" id="restockItemForm" enctype="multipart/form-data">
+                        @csrf <!-- Add this line to include the CSRF token -->
+                        <div class="input-group input-group-static my-3">
+                            <select name="item" id="item" type="select" class="form-select">
+                                <option value="selected">Select Item</option>
+                                <script>
+                                    $(document).ready(function() {
+                                        getItems().then(function (response) {
+                                            $.each(response, function (index, data) {
+                                                let option = $('<option value="' + data.id + '">' + data.item_name + '</option>');
+                                                $('#restockModal #item').append(option);
+                                            })
+                                        }).catch(function (error) {
+                                            console.log(error);
+                                        })
+                                    })
+                                </script>
+                            </select>
+                        </div>
+
+                        <div class="input-group input-group-outline my-3">
+                            <input name="quantity" class="form-control"
+                                   type="text" placeholder=" " required>
+                            <label class="form-label">Quantity</label>
+                        </div>
+
+                        <div class="input-group input-group-outline my-3">
+                            <input name="itemPrice" class="form-control"
+                                   type="text" placeholder=" " required>
+                            <label class="form-label">Item Price</label>
+                        </div>
+
+                        <div class="input-group input-group-outline my-3">
+                            <input name="transaction_reference" class="form-control"
+                                   type="text" placeholder=" " required>
+                            <label class="form-label">Transaction Reference</label>
+                        </div>
+
+                        <select id="preferredVendor" name="preferredVendor" class="form-select mb-3">
+                            <option disabled selected>Pick the vendor</option>
+                            <script>
+                                $(document).ready(function() {
+                                    getVendors().then(function (response) {
+                                        $.each(response, function (index, data) {
+                                            let option = $('<option value="' + data.id + '">' + data.company + '</option>');
+                                            $('#restockModal #preferredVendor').append(option);
+                                        })
+                                    }).catch(function (error) {
+                                        console.log(error);
+                                    })
+                                })
+                            </script>
+                        </select>
+
+                        <input class="btn btn-primary" type="submit" value="Restock">
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div style="z-index: 11000;" aria-hidden="true" aria-labelledby="newTagModalLabel" class="modal fade" id="addGroupModal" role="dialog"
+         tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title font-weight-normal" id="newTagModalLabel">New Group</h5>
+                    <button aria-label="Close" class="btn-close text-dark" data-bs-target="#addGroupModal" data-bs-toggle="modal" type="button">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="addGroupForm" method="post">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="floating-form-group mb-3">
+                            <input id="itemGroupEdit" class="floating-form-control" name="groupName" placeholder=" " type="text">
+                            <label class="label1" for="itemGroupEdit">Item Group</label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" data-bs-dismiss="modal" type="submit">Add</button>
+                        <button class="btn bg-gradient-secondary" data-bs-dismiss="modal" type="button">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
     <div class="modal fade" id="modal-delete" tabindex="-1" role="dialog" aria-labelledby="modal-delete"
          aria-hidden="true">
         <div class="modal-dialog modal-danger modal-dialog-centered modal-" role="document">
             <div class="modal-content">
-                {{--<div class="modal-header">
+                <div class="modal-header">
                     <h6 class="modal-title font-weight-normal" id="modal-title-delete">Your attention is required</h6>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
-                </div>--}}
+                </div>
                 <div class="modal-body">
                     <div class="py-3 text-center">
                         <i class="material-icons text-lg opacity-10">notifications</i>
