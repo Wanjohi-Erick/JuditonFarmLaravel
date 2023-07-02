@@ -14,7 +14,7 @@ class AnimalTreatment extends Model
         'animal_id',
         'type',
         'product',
-        'dapplication_method',
+        'application_method',
         'days_until_withdrawal',
         'technician',
         'dosage',

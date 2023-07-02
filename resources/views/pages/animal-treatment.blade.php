@@ -1,8 +1,8 @@
 <x-layout bodyClass="g-sidenav-show  bg-gray-200">
-    <x-navbars.sidebar activePage="animals"></x-navbars.sidebar>
+    <x-navbars.sidebar activePage="animalTreatment"></x-navbars.sidebar>
     <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
         <!-- Navbar -->
-        <x-navbars.navs.auth titlePage="AnimalsTreatment"></x-navbars.navs.auth>
+        <x-navbars.navs.auth titlePage="Animal Treatment"></x-navbars.navs.auth>
         <!-- End Navbar -->
         <div class="container-fluid py-4">
             @if(session('success'))
@@ -25,7 +25,7 @@
                             </div>
                         </div>
                         <div class=" me-3 my-3 text-end">
-                            <a onclick="openModal()" class="btn bg-gradient-dark mb-0" href="javascript:;"><i
+                            <a onclick="openModal()" class="btn bg-gradient-dark mb-0" href="javascript:"><i
                                     class="material-icons text-sm">add</i>&nbsp;&nbsp;Add Treatment</a>
                         </div>
                         <div class="card-body px-0 pb-2">
@@ -121,9 +121,9 @@
 
                         <div class="form-floating mb-3">
                             <select class="form-select" id="type" name="type" required>
-                                <option value="">Select type</option>
-                                <option value="Freshian">Freshian</option>
-                                <option value="Hereford">Hereford</option>
+                                <option selected disabled>Select type</option>
+                                <option value="Dewormer">Dewormer</option>
+                                <option value="Hormone Vaccine">Hormone Vaccine</option>
                             </select>
                             <label for="type">type</label>
                         </div>
@@ -131,18 +131,15 @@
 
                         <!-- product  input -->
                         <div class="form-floating mb-3">
-                            <select class="form-select" name="product" id=product" required>
-                                <option value="">Select product</option>
-                                <option value="Milk">Milk</option>
-                                <option value="Cheese">Cheese</option>
-                            </select>
-                            <label for="product">product</label>
+                            <input type="text" class="form-control" id="product"
+                                   name="product" required>
+                            <label for="withdrawal_days">Product</label>
                         </div>
 
                         <div class="form-floating mb-3">
                             <select class="form-select" name="application_method" id=application_method" required>
-                                <option value="">Select application_method</option>
-                                <option value="Drug">Drug</option>
+                                <option selected disabled>Select application method</option>
+                                <option value="Oral">Oral</option>
                                 <option value="Injection">Injection</option>
 
                             </select>
@@ -150,7 +147,7 @@
                         </div>
                         <div class="form-floating mb-3">
                             <input type="number" class="form-control" id="days_until_withdrawal"
-                                   name="days_until_withdrawal" required>
+                                   name="days_until_withdrawal" value="0" required>
                             <label for="withdrawal_days">Withdrawal days</label>
                         </div>
 
@@ -162,7 +159,7 @@
                         <div class="form-floating mb-3">
                             <input type="number" class="form-control" id="dosage" name="dosage" required>
 
-                            <label for="dosage">Dosage</label>
+                            <label for="dosage">Dosage (ml)</label>
                         </div>
 
                         <div class="form-floating mb-3">
@@ -171,9 +168,9 @@
                         </div>
                         <div class="form-floating mb-3">
                             <select class="form-select" name="body_part" id=body_part" required>
-                                <option value="">Select body_part</option>
-                                <option value="Hands">Hands</option>
-                                <option value="Legs">Legs</option>
+                                <option selected disabled>Select body part</option>
+                                <option value="Mouth">Mouth</option>
+                                <option value="Muscle">Muscle</option>
 
                             </select>
                             <label for="body_part">Body part </label>
@@ -181,8 +178,7 @@
 
 
                         <div class="form-floating mb-3">
-                            <input type="date" class="form-control" id="booster_date" name="booster_date"
-                                   required>
+                            <input type="date" class="form-control" id="booster_date" name="booster_date">
                             <label for="booster_date">Booster date</label>
                         </div>
                         <div class="form-floating mb-3">
@@ -190,6 +186,10 @@
                             <label for="total_cost">Total cost</label>
                         </div>
 
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" name="transaction_reference" required>
+                            <label for="total_cost">Transaction Reference</label>
+                        </div>
 
                         <!-- Description input -->
                         <div class="form-floating mb-3">
@@ -261,7 +261,7 @@
                         </div>
                         <div class="form-floating mb-3">
                             <input type="number" class="form-control" id="days_until_withdrawal"
-                                   name="days_until_withdrawal" required>
+                                   name="days_until_withdrawal" value="0" required>
                             <label for="withdrawal_days">Withdrawal days</label>
                         </div>
 
@@ -287,7 +287,7 @@
                                 <option value="Legs">Legs</option>
 
                             </select>
-                            <label for="body_part" Body part </label>
+                            <label for="body_part"> Body part </label>
                         </div>
 
 
@@ -301,6 +301,10 @@
                             <label for="total_cost">Total cost</label>
                         </div>
 
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" name="transaction_reference" required>
+                            <label for="total_cost">Transaction Reference</label>
+                        </div>
 
                         <!-- Description input -->
                         <div class="form-floating mb-3">
