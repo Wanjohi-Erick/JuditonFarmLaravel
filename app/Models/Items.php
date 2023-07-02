@@ -12,6 +12,6 @@ class Items extends Model
     protected $table = 'items';
     public function itemStock()
     {
-        return $this->hasOne(ItemStock::class, 'item_id');
+        return $this->hasMany(ItemStock::class, 'item_id');
     }
 }

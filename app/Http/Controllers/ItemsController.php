@@ -2,32 +2,33 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AnimalWeight;
 use App\Models\ItemGroup;
 use App\Models\Items;
 use App\Models\ItemStock;
 use App\Models\Vendors;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 class ItemsController extends Controller
 {
-    public function getAllItems() {
-        $items = Items::with('itemStock')->get();
-        return $items;
-    }
-
     public function index()
     {
         $items = $this->getAllItems();
-        $vendors = Vendors::all();
-        $itemGroups = ItemGroup::all();
-        return view('pages.items', compact('items', 'itemGroups', 'vendors'));
+        $vendors = Vendors::where('farm', request()->user()->farm)->get();
+        $itemGroups = ItemGroup::where('farm', '=', request()->user()->farm)->get();
+
+        return response()->json([
+            'items' => $items,
+            'itemGroups' => $itemGroups,
+            'vendors' => $vendors,
+        ]);
     }
 
-    public function save(Request $request)
+    public function store(Request $request)
     {
         try {
+            // Validation rules
             $validatedData = $request->validate([
                 'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
                 'itemName' => 'required',
@@ -38,7 +39,7 @@ class ItemsController extends Controller
                 'reorderLevel' => 'required|numeric',
                 'preferredVendor' => 'required|numeric',
                 'returnable' => 'nullable',
-                'openingStock' => 'required|numeric'
+                'openingStock' => 'required|numeric',
             ]);
 
             // Handle file upload
@@ -61,7 +62,11 @@ class ItemsController extends Controller
             $item->item_price = $validatedData['itemPrice'];
             $item->reorder_level = $validatedData['reorderLevel'];
             $item->preferred_vendor = $validatedData['preferredVendor'];
-            $item->farm = 1;
+
+            $user = $request->user();
+            $farm = $user->farm;
+
+            $item->farm = $farm;
 
             // Save the item data
             if ($item->save()) {
@@ -70,17 +75,62 @@ class ItemsController extends Controller
                 $itemStock->amount = $validatedData['openingStock'];
                 $itemStock->item_id = $id;
                 $itemStock->description = "Opening Stock";
-                $itemStock->farm = 1;
+                $itemStock->farm = $farm;
 
                 $itemStock->save();
-                return redirect()->route('items')->with('success', 'Item data saved successfully.');
+                return response()->json(['message' => 'Item data saved successfully.']);
             } else {
-                return redirect()->route('items')->with('fail', 'Failed to save item data.');
+                return response()->json(['error' => 'Failed to save item data.'], 500);
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('Error saving item data: ' . $e->getMessage());
-            return redirect()->route('items')->with('fail', 'An error occurred while saving item data.');
+            return response()->json(['error' => 'An error occurred while saving item data.'], 500);
         }
+    }
+
+    public function show($id)
+    {
+        $item = $this->find($id);
+
+        return response()->json(['item' => $item]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $item = Items::find($id);
+
+        // ...
+
+        $item->save();
+
+        // ...
+
+        return response()->json(['message' => 'Item updated successfully']);
+    }
+
+    public function destroy($id)
+    {
+        $item = Items::find($id);
+        $item->delete();
+
+        return response()->json(['message' => 'Item deleted successfully']);
+    }
+
+    public function view($id)
+    {
+        $items = $this->find($id);
+        $stock = ItemStock::where('item_id', $id)->get();
+
+        return response()->json([
+            'items' => $items,
+            'stock' => $stock,
+        ]);
+    }
+
+    public function getAllItems()
+    {
+        $items = Items::where('farm', request()->user()->farm)->with(['itemStock' => function ($query) {$query->latest()->first();}])->get();
+        return $items;
     }
 
     public function find($id)
@@ -90,57 +140,43 @@ class ItemsController extends Controller
         return $item;
     }
 
-    public function update(Request $request, $id)
+    public function restock(Request $request)
     {
-        $item = Items::find($id);
+        try {
+            // Validation rules
+            $validatedData = $request->validate([
+                'item' => 'required|numeric',
+                'itemPrice' => 'required|numeric',
+                'preferredVendor' => 'required|numeric',
+                'quantity' => 'required|numeric',
+                'transaction_reference' => 'required',
+            ]);
 
-        if ($request->hasFile('img')) {
-            $image = $request->file('img');
-            $imageName = time() . '_' . $image->getClientOriginalName();
-            $image->storeAs('public/images', $imageName);
-            $imagePath = 'images/' . $imageName;
-        } else {
-            $imagePath = null;
+            $user = $request->user();
+            $farm = $user->farm;
+
+            $itemId = $validatedData['item'];
+
+            $quantityInStock = $this->getCurrentStock($itemId)->amount;
+            $restocked = $validatedData['quantity'];
+            $itemStock = new ItemStock();
+            $itemStock->amount = doubleval($quantityInStock) + doubleval($restocked);
+            $itemStock-> item_id = $itemId;
+            $itemStock->description = "Restocking";
+            $itemStock->farm = $farm;
+
+            if ($itemStock->save()) {
+                return response()->json(['message' => 'Item stock updated successfully.']);
+            } else {
+                return response()->json(['error' => 'Failed to update item stock.'], 500);
+            }
+        } catch (Exception $e) {
+            Log::error('Error saving item data: ' . $e->getMessage());
+            return response()->json(['error' => 'An error occurred while saving updating stock.'], 500);
         }
-
-        $item->img = $imagePath;
-        $item->item_id = $request->input('category');
-        $item->tag = $request->input('tag');
-        $item->date_acquired = $request->input('date_acquired');
-        $item->breed = $request->input('breed');
-        $item->weight = $request->input('weight');
-        $item->date_last_weighed = $request->input('date_last_weighed');
-        $item->gender = $request->input('gender');
-        $item->description = $request->input('description');
-
-        $item->save();
-
-        $weight = new AnimalWeight();
-        $currentWeight = $request->input('weight');
-        $weight->weight = $currentWeight;
-        $weight->item_id = $id;
-        $lastWeight = $this->getLastWeight($id)->weight;
-        $weightGained = doubleval($currentWeight) - doubleval($lastWeight);
-        $weight->weight_gained = $weightGained;
-        $weight->farm = 1;
-
-        $weight->save();
-        // Redirect back or return a response as needed
-        return redirect()->back()->with('success', 'Animal updated successfully');
     }
 
-    public function delete($id) {
-        $item = Items::find($id);
-        $item->delete();
-
-        return redirect() -> back() ->with('success', 'Animal deleted successfully');
+    private function getCurrentStock($id) {
+        return ItemStock::where('item_id', $id)->latest()->first();
     }
-
-    public function view($id) {
-
-        $items = $this->find($id);
-        $stock = ItemStock::where('item_id', $id)->get();
-        return view('pages.view-item', compact('items', 'stock'));
-    }
-
 }
