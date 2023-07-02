@@ -17,8 +17,8 @@ return new class extends Migration
             $table->string('type', 100);
             $table->string('description', 500)->default('');
             $table->string('individual', 100)->default('');
-            $table->integer('bank')->default(0);
-            $table->string('account', 100);
+            $table->integer('bank')->default(0)->default(0);
+            $table->string('account', 100)->default('');
             $table->double('amount', 8, 2)->default(0.00);
             $table->string('status', 100)->default('');
             $table->unsignedBigInteger('farm')->default(0);

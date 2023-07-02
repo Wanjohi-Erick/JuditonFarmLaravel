@@ -179,6 +179,12 @@
                                                                         </option>
                                                                     </select>
                                                                 </div>
+
+                                                                <div class="input-group input-group-outline my-3">
+                                                                    <input name="transaction_reference" class="form-control"
+                                                                           type="text" placeholder=" " required>
+                                                                    <label class="form-label">Transaction Reference</label>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>

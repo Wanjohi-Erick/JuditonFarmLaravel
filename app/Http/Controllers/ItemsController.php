@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ItemGroup;
 use App\Models\Items;
 use App\Models\ItemStock;
+use App\Models\Transaction;
 use App\Models\Vendors;
 use Exception;
 use Illuminate\Http\Request;
@@ -40,6 +41,7 @@ class ItemsController extends Controller
                 'preferredVendor' => 'required|numeric',
                 'returnable' => 'nullable',
                 'openingStock' => 'required|numeric',
+                'transaction_reference' => 'required',
             ]);
 
             // Handle file upload
@@ -78,6 +80,16 @@ class ItemsController extends Controller
                 $itemStock->farm = $farm;
 
                 $itemStock->save();
+
+
+                $transaction = new Transaction();
+                $transaction->reference = $validatedData['transaction_reference'];
+                $transaction->type = 'OUTBOUND';
+                $transaction->description = $this->find($id)->item_name . ' opening stock transaction';
+                $transaction->amount = doubleval($validatedData['openingStock']) * doubleval($validatedData['itemPrice']);
+                $transaction->status = 'PAID';
+                $transaction->farm = $farm;
+                $transaction->save();
                 return response()->json(['message' => 'Item data saved successfully.']);
             } else {
                 return response()->json(['error' => 'Failed to save item data.'], 500);
@@ -166,6 +178,14 @@ class ItemsController extends Controller
             $itemStock->farm = $farm;
 
             if ($itemStock->save()) {
+                $transaction = new Transaction();
+                $transaction->reference = $validatedData['transaction_reference'];
+                $transaction->type = 'OUTBOUND';
+                $transaction->description = $this->find($itemId)->item_name . ' restocking transaction';
+                $transaction->amount = doubleval($restocked) * doubleval($validatedData['itemPrice']);
+                $transaction->status = 'PAID';
+                $transaction->farm = $farm;
+                $transaction->save();
                 return response()->json(['message' => 'Item stock updated successfully.']);
             } else {
                 return response()->json(['error' => 'Failed to update item stock.'], 500);
