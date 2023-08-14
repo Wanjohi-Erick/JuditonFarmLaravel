@@ -22,7 +22,12 @@ class CreateUsersTable extends Migration
             $table->string('location')->nullable();
             $table->text('about')->nullable();
             $table->string('password');
-            $table->string('farm');
+            $table->unsignedBigInteger('farm')->default(0);
+            $table->foreign('farm')
+                ->references('id')
+                ->on('farm_details')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
             $table->rememberToken();
             $table->timestamps();
         });
